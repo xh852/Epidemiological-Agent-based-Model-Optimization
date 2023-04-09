@@ -1,6 +1,7 @@
 import sys
 import matplotlib.pyplot as plt
 import random
+import time
 from agent import Agent
 from transition import infect, recover
 from location import generate_random_location, snap_to_edge
@@ -57,4 +58,7 @@ if __name__ == "__main__":
     num_agents = int(sys.argv[2])
     infection_probability = float(sys.argv[3])
     recover_probability = float(sys.argv[4])
+    start_time = time.time()
     main(duration, num_agents, infection_probability, recover_probability)
+    end_time = time.time()
+    print(f"Model runtime: {end_time - start_time}")
