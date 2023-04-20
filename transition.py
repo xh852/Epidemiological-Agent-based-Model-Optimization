@@ -2,9 +2,9 @@ import math
 import random
 from agent import Agent
 
-def distribute_vaccine(agent_list, vaccine_availability_day, daily_vaccine_distribution_count, vaccine_efficacy=0.95, current_day=0):
+def distribute_random_vaccine(agent_list, vaccine_availability_day, daily_vaccine_distribution_count, vaccine_efficacy=0.95, current_day=0):
     """
-    Distributes a specific number of vaccines to susceptible agents in the agent list after the vaccine becomes available.
+    Distributes a specific number of vaccines to susceptible agents randomly in the agent list after the vaccine becomes available.
 
     Args:
     - agent_list (list): A list of Agent objects.
