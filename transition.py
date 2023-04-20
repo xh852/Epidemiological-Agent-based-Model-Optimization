@@ -37,21 +37,17 @@ def infect(agent_list, infection_distance, infection_probability):
     - None
     """
     infected_agents = [agent for agent in agent_list if agent.status == "I"]
-
+    susceptible_agents = [agent for agent in agent_list if agent.status == "S"]
     for infected_agent in infected_agents:
         infected_location = infected_agent.location
-        for agent in agent_list:
-            if agent.status != "S":
-                continue
-
-            susceptible_location = agent.location
+        for susceptible_agent in susceptible_agents:
+            susceptible_location = susceptible_agent.location
             distance = math.sqrt((infected_location[0] - susceptible_location[0]) ** 2 + (infected_location[1] - susceptible_location[1]) ** 2)
             if distance <= infection_distance:
-                adjusted_infection_probability = infection_probability * (1 - agent.vaccine_efficacy)
+                adjusted_infection_probability = infection_probability * (1 - susceptible_agent.vaccine_efficacy)
                 if random.random() < adjusted_infection_probability:
-                    agent.status = 'I'
-                    agent.reset_days_with_status()
-
+                    susceptible_agent.status = 'I'
+                    susceptible_agent.reset_days_with_status()
     
 def recover(agents, minimum_infection_duration, recovery_probability, vaccinated_recovery_reduction=0):
     """
