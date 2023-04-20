@@ -33,10 +33,10 @@ def main(duration, num_agents, infection_distance, infection_probability, minimu
             agent.location = new_location
 
         # Infect agents
-        infect(agents, infection_distance, infection_probability=infection_probability)
+        infect(agents, infection_distance, infection_probability)
 
         # Recover agents
-        recover(agents, minimum_infection_duration, recovery_probability=recovery_probability)
+        recover(agents, minimum_infection_duration, recovery_probability)
 
     # Add final day status counts
     for status in ["S", "I", "R"]:
