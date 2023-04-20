@@ -22,7 +22,7 @@ python -m basic_sim 100 1000 0.05 0.3 7 0.3
 ```
 which will simulate how an epidemic unfolds with a population of 10,000 agents over 100 days with 0.3 infection and recovery chance. At the end the command will print out the model's runtime and produce a plot of the population counts in the agent-based SIR model.
 
-To run the vaccine simulation, from the root directory, run in your terminal
+To run the random vaccine simulation, from the root directory, run in your terminal
 ```
 python -m random_vaccine_sim {duration} {num_agents} {infection_distance} {infection_prob} {minimum_infection_duration} {recovery_prob} {vaccine_availability_day} {daily_vaccine_distribution_count} {initial_vaccine_efficacy} {vaccinated_recovery_reduction}
 ```
