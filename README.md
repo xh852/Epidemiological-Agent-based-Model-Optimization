@@ -42,5 +42,3 @@ To run the unit tests, you can run
 ```
 pytest tests
 ```
-
-blahblahblah this a test
