@@ -12,13 +12,13 @@ Additionally, the project attempts to optimize the model runtime by comparing an
 
 To run the basic simulation, from the root directory, run in your terminal
 ```
-python -m basic_sim {duration} {num_agents} {infection_prob} {recovery_prob}
+python -m basic_sim {duration} {num_agents} {infection_distance} {infection_prob} {minimum_infection_duration} {recovery_prob} {vaccine_availability_day} {daily_vaccine_distribution_count} {initial_vaccine_efficacy} {vaccinated_recovery_reduction}
 ```
 
 For example,
 you can run
 ```
-python -m basic_sim 100 10000 0.3 0.3
+python -m basic_sim 365 1000 0.1 0.3 7 0.3 50 10 0.95 2
 ```
 which will simulate how an epidemic unfolds with a population of 10,000 agents over 100 days with 0.3 infection and recovery chance. At the end the command will print out the model's runtime and produce a plot of the population counts in the agent-based SIR model.
 
