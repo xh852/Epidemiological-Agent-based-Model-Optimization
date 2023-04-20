@@ -1,21 +1,51 @@
-import unittest
+import math
 from location import generate_random_location, snap_to_edge
 
-class TestLocation(unittest.TestCase):
+def test_generate_random_location():
+    # Test that the function returns a tuple of length 2
+    location = (0, 0)
+    distance = 1
+    result = generate_random_location(location, distance)
+    assert isinstance(result, tuple)
+    assert len(result) == 2
 
-    def test_generate_random_location(self):
-        current_location = (0.5, 0.5)
-        max_distance = 0.1
-        new_location = generate_random_location(current_location, max_distance)
-        distance = ((current_location[0] - new_location[0])**2 + (current_location[1] - new_location[1])**2)**0.5
-        self.assertLessEqual(distance, max_distance)
+    # Test that the function returns a location within the specified distance
+    location = (0, 0)
+    distance = 1
+    for i in range(100):
+        result = generate_random_location(location, distance)
+        d = math.sqrt(result[0]**2 + result[1]**2)
+        assert d <= distance
 
-    def test_snap_to_edge(self):
-        location = (-0.1, 0.5)
-        min_x, min_y, max_x, max_y = 0, 0, 1, 1
-        snapped_location = snap_to_edge(location, min_x, min_y, max_x, max_y)
-        self.assertTrue(min_x <= snapped_location[0] <= max_x)
-        self.assertTrue(min_y <= snapped_location[1] <= max_y)
+    # Test that the function returns a different location each time it's called
+    location = (0, 0)
+    distance = 1
+    result1 = generate_random_location(location, distance)
+    result2 = generate_random_location(location, distance)
+    assert result1 != result2
 
-if __name__ == '__main__':
-    unittest.main()
+def test_snap_to_edge():
+    # Test a location inside the unit square
+    location = (0.5, 0.5)
+    snapped_location = snap_to_edge(location, 0, 0, 1, 1)
+    assert snapped_location == (0.5, 0.5)
+
+    # Test a location outside the unit square on the left
+    location = (-0.5, 0.5)
+    snapped_location = snap_to_edge(location, 0, 0, 1, 1)
+    assert snapped_location == (0, 0.5)
+
+    # Test a location outside the unit square on the right
+    location = (1.5, 0.5)
+    snapped_location = snap_to_edge(location, 0, 0, 1, 1)
+    assert snapped_location == (1, 0.5)
+
+    # Test a location outside the unit square on the bottom
+    location = (0.5, -0.5)
+    snapped_location = snap_to_edge(location, 0, 0, 1, 1)
+    assert snapped_location == (0.5, 0)
+
+    # Test a location outside the unit square on the top
+    location = (0.5, 1.5)
+    snapped_location = snap_to_edge(location, 0, 0, 1, 1)
+    assert snapped_location == (0.5, 1)
