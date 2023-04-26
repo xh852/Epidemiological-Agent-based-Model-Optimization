@@ -71,6 +71,6 @@ if __name__ == "__main__":
     vaccinated_recovery_reduction = int(sys.argv[10])
 
     start_time = time.time()
-    main(duration, num_agents, infection_probability, recovery_probability, vaccine_availability_day, daily_vaccine_distribution_count, initial_vaccine_efficacy, vaccinated_recovery_reduction)
+    main(duration, num_agents, infection_distance, infection_probability, minimum_infection_duration, recovery_probability, vaccine_availability_day, daily_vaccine_distribution_count, initial_vaccine_efficacy, vaccinated_recovery_reduction)
     end_time = time.time()
     print(f"Model runtime: {end_time - start_time}")
