@@ -42,3 +42,19 @@ To run the unit tests, you can run
 ```
 pytest tests
 ```
+
+## Optimization Methods
+
+### Cython
+Cython may be used to translate Python code into optimized C code, and compile C code as extension modules for Python. Cython also allows for the use of C data types in Python. There are two main benefits of Cython:
+* Speed: Use of C compiliation allows for fast execution. Note, simple numerical programs that use lower-level C may not see a difference. However, programs that use many iterations can improve by many orders of magnitude.
+* Easy calling into C code: Use of C libraries and data types allows for more efficient C compilation, while still allowing the user to code in Python.
+
+Source: [Cython Docs](https://cython.readthedocs.io/en/latest/src/quickstart/overview.html); [NYU-CDS Notes](https://nyu-cds.github.io/python-cython/)
+
+### Testing Optimization Techniques
+To compare time efficiency of optimization methods vs. the original code, use the following command:
+```
+python optimization_time.py
+```
+
