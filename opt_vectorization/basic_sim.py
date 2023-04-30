@@ -7,8 +7,10 @@ from agent import Agent
 from transition import infect, recover
 from location import generate_random_location, snap_to_edge
 
-
-def main(duration, num_agents, infection_distance, infection_probability, minimum_infection_duration, recovery_probability):
+def main(duration, num_agents, infection_distance, infection_probability, minimum_infection_duration, recovery_probability, profile=False):
+    # Initialize random seed
+    random.seed(42)   
+    
     # Initialize the list of agents
     agents = [Agent("S", (random.random(), random.random())) for _ in range(num_agents)]
     
@@ -53,6 +55,14 @@ def main(duration, num_agents, infection_distance, infection_probability, minimu
     plt.legend()
     plt.savefig("plot_basic_sim_optvec_{}_{}_{}_{}_{}_{}.png".format(duration, num_agents, infection_distance, infection_probability, minimum_infection_duration, recovery_probability))
 
+    # line_profiler
+    import line_profiler
+    if profile:
+        profiler = line_profiler.LineProfiler(main)
+        profiler.enable()
+        main(duration, num_agents, infection_distance, infection_probability, minimum_infection_duration, recovery_probability)
+        profiler.disable()
+        profiler.print_stats()
 
 if __name__ == "__main__":
     duration = int(sys.argv[1])
@@ -61,8 +71,8 @@ if __name__ == "__main__":
     infection_probability = float(sys.argv[4])
     minimum_infection_duration = int(sys.argv[5])
     recovery_probability = float(sys.argv[6])
-
+    profile = bool(sys.argv[7])
     start_time = time.time()
-    main(duration, num_agents, infection_distance, infection_probability, minimum_infection_duration, recovery_probability)
+    main(duration, num_agents, infection_distance, infection_probability, minimum_infection_duration, recovery_probability, profile)
     end_time = time.time()
     print(f"Model runtime: {end_time - start_time}")
