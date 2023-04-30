@@ -46,7 +46,7 @@ def distribute_targeted_vaccine(agent_list, vaccine_availability_day, daily_vacc
             agent.vaccinated = True
             agent.vaccine_efficacy = vaccine_efficacy
 
-def infect(agent_list, infection_distance, infection_probability, infection_probability_increase = 2):
+def infect(agent_list, infection_distance, infection_probability, infection_probability_increase = 0.4):
     """
     Infects any susceptible agents within a given distance of an infected agent, with a given infection probability.
 
@@ -66,7 +66,7 @@ def infect(agent_list, infection_distance, infection_probability, infection_prob
             susceptible_location = susceptible_agent.location
             distance = math.sqrt((infected_location[0] - susceptible_location[0]) ** 2 + (infected_location[1] - susceptible_location[1]) ** 2)
             if distance <= infection_distance:
-                adjusted_infection_probability = infection_probability * (susceptible_agent.essential_worker*infection_probability_increase + 1) * (1 - susceptible_agent.vaccine_efficacy)
+                adjusted_infection_probability = (infection_probability + susceptible_agent.essential_worker*infection_probability_increase) * (1 - susceptible_agent.vaccine_efficacy)
                 if random.random() < adjusted_infection_probability:
                     susceptible_agent.status = 'I'
                     susceptible_agent.reset_days_with_status()

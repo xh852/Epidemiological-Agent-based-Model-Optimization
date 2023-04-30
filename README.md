@@ -42,7 +42,7 @@ python -m targeted_vaccine_sim {duration} {num_agents} {infection_distance} {inf
 For example,
 you can run
 ```
-python -m targeted_vaccine_sim 365 1000 0.05 0.2 7 0.2 50 10 0.95 2 0.1 2 100
+python -m targeted_vaccine_sim 365 1000 0.05 0.1 7 0.1 50 10 0.95 2 0.1 0.4 100
 ```
 
 To view an animation of the agent's locations over time, you can run

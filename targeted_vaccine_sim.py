@@ -6,7 +6,7 @@ from agent import Agent
 from transition import infect, recover, distribute_targeted_vaccine
 from location import generate_random_location, snap_to_edge
 
-def main(duration, num_agents, infection_distance, infection_probability, minimum_infection_duration, recovery_probability, vaccine_availability_day, daily_vaccine_distribution_count, initial_vaccine_efficacy=0.95, vaccinated_recovery_reduction=2, essential_worker_proportion = 0.1, infection_probability_increase = 2, complete_rollout_day=100):
+def main(duration, num_agents, infection_distance, infection_probability, minimum_infection_duration, recovery_probability, vaccine_availability_day, daily_vaccine_distribution_count, initial_vaccine_efficacy=0.95, vaccinated_recovery_reduction=2, essential_worker_proportion = 0.1, infection_probability_increase = 0.4, complete_rollout_day=100):
     # Initialize the list of agents
     agents = [Agent("S", (random.random(), random.random()), targetable = False, essential_worker = random.random() < essential_worker_proportion) for _ in range(num_agents)]
 
@@ -59,7 +59,7 @@ def main(duration, num_agents, infection_distance, infection_probability, minimu
     plt.ylabel("Number of Agents")
     plt.title("Agent-based Simulation")
     plt.legend()
-    plt.savefig("plot_targeted_vaccine_sim_{}_{}_{}_{}_{}_{}_{}_{}_{}_{}.png".format(duration, num_agents, infection_distance, infection_probability, minimum_infection_duration, recovery_probability, vaccine_availability_day, daily_vaccine_distribution_count, initial_vaccine_efficacy, vaccinated_recovery_reduction))
+    plt.savefig("plot_targeted_vaccine_sim_{}_{}_{}_{}_{}_{}_{}_{}_{}_{}_{}_{}_{}.png".format(duration, num_agents, infection_distance, infection_probability, minimum_infection_duration, recovery_probability, vaccine_availability_day, daily_vaccine_distribution_count, initial_vaccine_efficacy, vaccinated_recovery_reduction, essential_worker_proportion, infection_probability_increase, complete_rollout_day))
 
 if __name__ == "__main__":
     duration = int(sys.argv[1])
