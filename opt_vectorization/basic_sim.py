@@ -2,6 +2,7 @@ import sys
 import matplotlib.pyplot as plt
 import random
 import time
+import numpy as np
 from agent import Agent
 from transition import infect, recover
 from location import generate_random_location, snap_to_edge
@@ -12,25 +13,23 @@ def main(duration, num_agents, infection_distance, infection_probability, minimu
     
     # Initialize the list of agents
     agents = [Agent("S", (random.random(), random.random())) for _ in range(num_agents)]
-
+    
     # Set one agent as patient zero
     agents[0].status = "I"
 
     # Initialize status counts
-    status_counts = {"S": [], "I": [], "R": []}
+    status_counts = {"S": np.zeros(duration+1), "I": np.zeros(duration+1), "R": np.zeros(duration+1)}
 
-
-    # Run simulation for given duration
-    for _ in range(duration):
+    for day in range(duration):
         # Update status counts for current day
-        for status in ["S", "I", "R"]:
-            count = sum(1 for agent in agents if agent.status == status)
-            status_counts[status].append(count)
+        status_counts["S"][day] = np.count_nonzero([agent.status == "S" for agent in agents])
+        status_counts["I"][day] = np.count_nonzero([agent.status == "I" for agent in agents])
+        status_counts["R"][day] = np.count_nonzero([agent.status == "R" for agent in agents])
 
         # Update agent days with status and locations
+        max_distance = 0.01
         for agent in agents:
             agent.increase_days_with_status()
-            max_distance = 0.01
             new_location = generate_random_location(agent.location, max_distance)
             new_location = snap_to_edge(new_location, 0, 0, 1, 1)
             agent.location = new_location
@@ -41,10 +40,10 @@ def main(duration, num_agents, infection_distance, infection_probability, minimu
         # Recover agents
         recover(agents, minimum_infection_duration, recovery_probability)
 
-    # Add final day status counts
-    for status in ["S", "I", "R"]:
-        count = sum(1 for agent in agents if agent.status == status)
-        status_counts[status].append(count)
+    # Update status counts for last day
+    status_counts["S"][duration] = np.count_nonzero([agent.status == "S" for agent in agents])
+    status_counts["I"][duration] = np.count_nonzero([agent.status == "I" for agent in agents])
+    status_counts["R"][duration] = np.count_nonzero([agent.status == "R" for agent in agents])
 
     # Plot status counts over time
     plt.plot(status_counts["S"], label="Susceptible")
@@ -54,7 +53,7 @@ def main(duration, num_agents, infection_distance, infection_probability, minimu
     plt.ylabel("Number of Agents")
     plt.title("Agent-based Simulation")
     plt.legend()
-    plt.savefig("plot_basic_sim_{}_{}_{}_{}_{}_{}.png".format(duration, num_agents, infection_distance, infection_probability, minimum_infection_duration, recovery_probability))
+    plt.savefig("plot_basic_sim_optvec_{}_{}_{}_{}_{}_{}.png".format(duration, num_agents, infection_distance, infection_probability, minimum_infection_duration, recovery_probability))
 
     # line_profiler
     import line_profiler

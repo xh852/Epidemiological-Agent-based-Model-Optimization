@@ -1,5 +1,7 @@
 import math
 import random
+import numpy as np
+# import itertools
 from agent import Agent
 
 def distribute_random_vaccine(agent_list, vaccine_availability_day, daily_vaccine_distribution_count, vaccine_efficacy=0.95, current_day=0):
@@ -59,19 +61,35 @@ def infect(agent_list, infection_distance, infection_probability, infection_prob
     Returns:
     - None
     """
-    infected_agents = [agent for agent in agent_list if agent.status == "I"]
-    susceptible_agents = [agent for agent in agent_list if agent.status == "S"]
-    for infected_agent in infected_agents:
-        infected_location = infected_agent.location
-        for susceptible_agent in susceptible_agents:
-            susceptible_location = susceptible_agent.location
-            distance = math.sqrt((infected_location[0] - susceptible_location[0]) ** 2 + (infected_location[1] - susceptible_location[1]) ** 2)
-            if distance <= infection_distance:
-                adjusted_infection_probability = (infection_probability + susceptible_agent.immunodeficient*infection_probability_increase) * (1 - susceptible_agent.vaccine_efficacy)
-                if random.random() < adjusted_infection_probability:
-                    susceptible_agent.status = 'I'
-                    susceptible_agent.reset_days_with_status()
-    
+    # Get infected and susceptible agent locations
+    infected_locations = np.array([list(agent.location) for agent in agent_list if agent.status == "I"])
+    susceptible_agents = np.array([[agent.location[0],agent.location[1], agent] for agent in agent_list if agent.status == "S"])
+    if len(infected_locations) == 0 or len(susceptible_agents) == 0:
+        #Only proceed if infected AND susceptible agents exist
+        return
+    susceptible_locations = susceptible_agents[:, :2].astype("float64")
+    susceptible_info = susceptible_agents[:, 2:]
+
+    # Get distance between every infected and susceptible pair
+    distances = np.sqrt(np.sum((np.array(infected_locations)[:, np.newaxis, :] - np.array(susceptible_locations)[np.newaxis, :, :])**2, axis=-1))
+
+    # # Compute distances for all pairs of agents between A and B
+    # distances = [np.sqrt(np.sum((np.array(a) - np.array(b))**2)) for a, b in itertools.product(infected_locations, susceptible_locations)]
+    # distances = np.array(distances).reshape(len(infected_locations), len(susceptible_locations))
+
+    # Find indices of distances below the threshold and update susceptible agents
+    infectable_agents = np.argwhere(distances < infection_distance)
+    infectable_agents = infectable_agents[:, 1]
+
+    for idx in infectable_agents:
+        agent = susceptible_info[idx][0]
+        
+        adjusted_infection_probability = (infection_probability + agent.immunodeficient*infection_probability_increase) * (1 - agent.vaccine_efficacy)
+        if random.random() < adjusted_infection_probability:
+            agent.status = 'I'
+            agent.reset_days_with_status()
+
+
 def recover(agents, minimum_infection_duration, recovery_probability, vaccinated_recovery_reduction=0):
     """
     Recovers agents they have been infected for at least minimum_infection_duration days, with a given recovery probability.
