@@ -19,7 +19,7 @@ def distribute_random_vaccine(agent_list, vaccine_availability_day, daily_vaccin
     - None
     """
     if current_day >= vaccine_availability_day:
-        susceptible_agents = [agent for agent in agent_list if agent.status == "S"]
+        susceptible_agents = [agent for agent in agent_list if agent.status == "S" if agent.vaccinated == False]
         selected_agents = random.sample(susceptible_agents, min(daily_vaccine_distribution_count, len(susceptible_agents)))
 
         for agent in selected_agents:
@@ -41,7 +41,7 @@ def distribute_targeted_vaccine(agent_list, vaccine_availability_day, daily_vacc
     - None
     """
     if current_day >= vaccine_availability_day:
-        susceptible_agents = [agent for agent in agent_list if agent.status == "S" if agent.targetable == True]
+        susceptible_agents = [agent for agent in agent_list if agent.status == "S" if agent.targetable == True if agent.vaccinated == False]
         selected_agents = random.sample(susceptible_agents, min(daily_vaccine_distribution_count, len(susceptible_agents)))
 
         for agent in selected_agents:
