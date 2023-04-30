@@ -71,14 +71,15 @@ Vectorization with NumPy is useful to write more efficient code for the followin
 
 
 ### Testing Optimization Techniques (Cython, Vectorization)
-To compare time efficiency of optimization methods vs. the original code, use the following command:
+To compare time efficiency of optimization method vs. the original code, use the following command:
 ```
 python optimization_time.py basic_sim.py 100 1000 0.05 0.3 7 0.3
 python optimization_time.py random_vaccine_sim.py 365 1000 0.05 0.3 7 0.3 50 10 0.95 2
+python optimization_time.py targeted_vaccine_sim.py 365 1000 0.05 0.1 7 0.1 50 10 0.95 2 0.1 0.4 100
 ```
 
 ### Line Profiler
-python -m basic_sim 100 1000 0.05 0.3 7 0.3 True
+Change profile to True in basic_sim main function
 
 ```
 Output example: Total time: 2.56755 s

@@ -32,7 +32,9 @@ if __name__ == "__main__":
     daily_vaccine_distribution_count = ""
     initial_vaccine_efficacy = ""
     vaccinated_recovery_reduction = ""
-
+    immunodeficient_proportion = ""
+    infection_probability_increase = ""
+    complete_rollout_day = ""
 
     if len(sys.argv) > 8:
         vaccine_availability_day = int(sys.argv[8])
@@ -40,10 +42,17 @@ if __name__ == "__main__":
         initial_vaccine_efficacy = float(sys.argv[10])
         vaccinated_recovery_reduction = int(sys.argv[11])
     
+    if len(sys.argv) > 12:
+        immunodeficient_proportion = float(sys.argv[12])
+        infection_probability_increase = float(sys.argv[13])
+        complete_rollout_day = float(sys.argv[16])
+    
 
-    command += " {} {} {} {} {} {} {} {} {} {}".format(duration, num_agents, infection_distance, infection_probability, 
+    command += " {} {} {} {} {} {} {} {} {} {} {} {} {}".format(duration, num_agents, infection_distance, infection_probability, 
                                            minimum_infection_duration, recovery_probability, 
                                            vaccine_availability_day, daily_vaccine_distribution_count, 
-                                           initial_vaccine_efficacy, vaccinated_recovery_reduction)
+                                           initial_vaccine_efficacy, vaccinated_recovery_reduction,
+                                           immunodeficient_proportion, infection_probability_increase,
+                                           complete_rollout_day)
 
     time_opt(command)

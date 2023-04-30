@@ -54,6 +54,7 @@ def infect(agent_list, infection_distance, infection_probability, infection_prob
     - agent_list: A list of agents.
     - infection_distance: A float representing the maximum distance at which other agents can be infected.
     - infection_probability: A float representing the probability of infection if an agent is within infection_distance.
+    - infection_probability_increase: A flat increase for how likely an immunodeficient person gets infected
 
     Returns:
     - None
