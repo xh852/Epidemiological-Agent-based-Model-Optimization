@@ -24,7 +24,29 @@ def distribute_random_vaccine(agent_list, vaccine_availability_day, daily_vaccin
             agent.vaccinated = True
             agent.vaccine_efficacy = vaccine_efficacy
 
-def infect(agent_list, infection_distance, infection_probability):
+def distribute_targeted_vaccine(agent_list, vaccine_availability_day, daily_vaccine_distribution_count, vaccine_efficacy=0.95, current_day=0):
+    """
+    Distributes a specific number of vaccines to susceptible and targetable agents in agent list after the vaccine becomes available.
+
+    Args:
+    - agent_list (list): A list of Agent objects.
+    - vaccine_availability_day (int): The day when the vaccine becomes available.
+    - daily_vaccine_distribution_count (int): The number of vaccines distributed daily after the vaccine becomes available.
+    - vaccine_efficacy (float): A float between 0 and 1 representing the initial efficacy of the vaccine.
+    - current_day (int): The current day of the simulation.
+
+    Returns:
+    - None
+    """
+    if current_day >= vaccine_availability_day:
+        susceptible_agents = [agent for agent in agent_list if agent.status == "S" if agent.targetable == True]
+        selected_agents = random.sample(susceptible_agents, min(daily_vaccine_distribution_count, len(susceptible_agents)))
+
+        for agent in selected_agents:
+            agent.vaccinated = True
+            agent.vaccine_efficacy = vaccine_efficacy
+
+def infect(agent_list, infection_distance, infection_probability, infection_probability_increase = 0.4):
     """
     Infects any susceptible agents within a given distance of an infected agent, with a given infection probability.
 
@@ -44,7 +66,7 @@ def infect(agent_list, infection_distance, infection_probability):
             susceptible_location = susceptible_agent.location
             distance = math.sqrt((infected_location[0] - susceptible_location[0]) ** 2 + (infected_location[1] - susceptible_location[1]) ** 2)
             if distance <= infection_distance:
-                adjusted_infection_probability = infection_probability * (1 - susceptible_agent.vaccine_efficacy)
+                adjusted_infection_probability = (infection_probability + susceptible_agent.essential_worker*infection_probability_increase) * (1 - susceptible_agent.vaccine_efficacy)
                 if random.random() < adjusted_infection_probability:
                     susceptible_agent.status = 'I'
                     susceptible_agent.reset_days_with_status()
