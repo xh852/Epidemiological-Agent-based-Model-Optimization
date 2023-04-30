@@ -6,7 +6,7 @@ from agent import Agent
 from transition import infect, recover
 from location import generate_random_location, snap_to_edge
 
-def main(duration, num_agents, infection_distance, infection_probability, minimum_infection_duration, recovery_probability):
+def main(duration, num_agents, infection_distance, infection_probability, minimum_infection_duration, recovery_probability, profile=False):
     # Initialize random seed
     random.seed(42)   
     
@@ -55,6 +55,15 @@ def main(duration, num_agents, infection_distance, infection_probability, minimu
     plt.title("Agent-based Simulation")
     plt.legend()
     plt.savefig("plot_basic_sim_{}_{}_{}_{}_{}_{}.png".format(duration, num_agents, infection_distance, infection_probability, minimum_infection_duration, recovery_probability))
+
+    # line_profiler
+    import line_profiler
+    if profile:
+        profiler = line_profiler.LineProfiler(main)
+        profiler.enable()
+        main(duration, num_agents, infection_distance, infection_probability, minimum_infection_duration, recovery_probability, False)
+        profiler.disable()
+        profiler.print_stats()
 
 if __name__ == "__main__":
     duration = int(sys.argv[1])
