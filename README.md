@@ -33,6 +33,18 @@ you can run
 python -m random_vaccine_sim 365 1000 0.05 0.3 7 0.3 50 10 0.95 2
 ```
 
+To run the targeted vaccine simulation, from the root directory, run in your terminal
+```
+python -m targeted_vaccine_sim {duration} {num_agents} {infection_distance} {infection_prob} {minimum_infection_duration} {recovery_prob} {vaccine_availability_day} {daily_vaccine_distribution_count} {initial_vaccine_efficacy} {vaccinated_recovery_reduction}
+{essential_worker_proportion} {infection_probability_increase} {complete_rollout_day}
+```
+
+For example,
+you can run
+```
+python -m targeted_vaccine_sim 365 1000 0.05 0.2 7 0.2 50 10 0.95 2 0.1 2 100
+```
+
 To view an animation of the agent's locations over time, you can run
 ```
 python -m animation {parameters}
