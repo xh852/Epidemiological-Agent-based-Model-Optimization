@@ -62,6 +62,8 @@ Cython may be used to translate Python code into optimized C code, and compile C
 * Speed: Use of C compiliation allows for fast execution. Note, simple numerical programs that use lower-level C may not see a difference. However, programs that use many iterations can improve by many orders of magnitude.
 * Easy calling into C code: Use of C libraries and data types allows for more efficient C compilation, while still allowing the user to code in Python.
 
+Note: Run "python setup.py build_ext --inplace" in opt_cython to recompile c files
+
 Source: [Cython Docs](https://cython.readthedocs.io/en/latest/src/quickstart/overview.html); [NYU-CDS Notes](https://nyu-cds.github.io/python-cython/)
 
 ### Vectorization
