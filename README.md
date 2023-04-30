@@ -64,11 +64,19 @@ Cython may be used to translate Python code into optimized C code, and compile C
 
 Source: [Cython Docs](https://cython.readthedocs.io/en/latest/src/quickstart/overview.html); [NYU-CDS Notes](https://nyu-cds.github.io/python-cython/)
 
-### Testing Optimization Techniques
+### Vectorization
+Vectorization with NumPy is useful to write more efficient code for the following reasons:
+* Compute operations in parallel - for instance, carry out arithmetic on an entire vector or matrix.
+* NumPy is implemented in a low-level language (C), that operates quickly on large data.
+
+
+### Testing Optimization Techniques (Cython, Vectorization)
 To compare time efficiency of optimization methods vs. the original code, use the following command:
 ```
-python optimization_time.py
+python optimization_time.py basic_sim.py 100 1000 0.05 0.3 7 0.3
+python optimization_time.py random_vaccine_sim.py 365 1000 0.05 0.3 7 0.3 50 10 0.95 2
 ```
+
 ### Line Profiler
 python -m basic_sim 100 1000 0.05 0.3 7 0.3 True
 
