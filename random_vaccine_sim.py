@@ -53,10 +53,7 @@ def main(duration, num_agents, infection_distance, infection_probability, minimu
     plt.ylabel("Number of Agents")
     plt.title("Agent-based Simulation")
     plt.legend()
-    plt.savefig("plot_vaccine_sim_{}_{}_{}_{}_{}_{}_{}_{}_{}_{}.png".format(duration, num_agents, infection_distance, infection_probability, minimum_infection_duration, recovery_probability, vaccine_availability_day, daily_vaccine_distribution_count, initial_vaccine_efficacy, vaccinated_recovery_reduction))
-
-
-
+    plt.savefig("plot_random_vaccine_sim_{}_{}_{}_{}_{}_{}_{}_{}_{}_{}.png".format(duration, num_agents, infection_distance, infection_probability, minimum_infection_duration, recovery_probability, vaccine_availability_day, daily_vaccine_distribution_count, initial_vaccine_efficacy, vaccinated_recovery_reduction))
 
 if __name__ == "__main__":
     duration = int(sys.argv[1])
