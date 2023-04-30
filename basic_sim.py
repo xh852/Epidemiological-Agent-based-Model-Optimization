@@ -61,7 +61,7 @@ def main(duration, num_agents, infection_distance, infection_probability, minimu
     if profile:
         profiler = line_profiler.LineProfiler(main)
         profiler.enable()
-        main(duration, num_agents, infection_distance, infection_probability, minimum_infection_duration, recovery_probability, False)
+        main(duration, num_agents, infection_distance, infection_probability, minimum_infection_duration, recovery_probability)
         profiler.disable()
         profiler.print_stats()
 
@@ -72,7 +72,8 @@ if __name__ == "__main__":
     infection_probability = float(sys.argv[4])
     minimum_infection_duration = int(sys.argv[5])
     recovery_probability = float(sys.argv[6])
+    profile = bool(sys.argv[7])
     start_time = time.time()
-    main(duration, num_agents, infection_distance, infection_probability, minimum_infection_duration, recovery_probability)
+    main(duration, num_agents, infection_distance, infection_probability, minimum_infection_duration, recovery_probability, profile)
     end_time = time.time()
     print(f"Model runtime: {end_time - start_time}")

@@ -70,7 +70,7 @@ To compare time efficiency of optimization methods vs. the original code, use th
 python optimization_time.py
 ```
 ### Line Profiler
-python -m basic_sim 100 1000 0.05 0.3 7 0.3
+python -m basic_sim 100 1000 0.05 0.3 7 0.3 True
 
 ```
 Output example: Total time: 2.56755 s
