@@ -6,12 +6,12 @@ from agent import Agent
 from transition import infect, recover, distribute_targeted_vaccine
 from location import generate_random_location, snap_to_edge
 
-def main(duration, num_agents, infection_distance, infection_probability, minimum_infection_duration, recovery_probability, vaccine_availability_day, daily_vaccine_distribution_count, initial_vaccine_efficacy=0.95, vaccinated_recovery_reduction=2, essential_worker_proportion = 0.1, infection_probability_increase = 0.4, complete_rollout_day=100):
+def main(duration, num_agents, infection_distance, infection_probability, minimum_infection_duration, recovery_probability, vaccine_availability_day, daily_vaccine_distribution_count, initial_vaccine_efficacy=0.95, vaccinated_recovery_reduction=2, immunodeficient_proportion = 0.1, infection_probability_increase = 0.4, complete_rollout_day=100):
     # Initialize random seed
     random.seed(42)
 
     # Initialize the list of agents
-    agents = [Agent("S", (random.random(), random.random()), targetable = False, essential_worker = random.random() < essential_worker_proportion) for _ in range(num_agents)]
+    agents = [Agent("S", (random.random(), random.random()), targetable = False, immunodeficient = random.random() < immunodeficient_proportion) for _ in range(num_agents)]
 
     # Set one agent as patient zero
     agents[0].status = "I"
@@ -20,7 +20,7 @@ def main(duration, num_agents, infection_distance, infection_probability, minimu
     status_counts = {"S": [], "I": [], "R": []}
 
     for agent in agents:
-        if agent.essential_worker == True:
+        if agent.immunodeficient == True:
             agent.targetable = True
 
     # Run simulation for given duration
@@ -62,7 +62,7 @@ def main(duration, num_agents, infection_distance, infection_probability, minimu
     plt.ylabel("Number of Agents")
     plt.title("Agent-based Simulation")
     plt.legend()
-    plt.savefig("plot_targeted_vaccine_sim_{}_{}_{}_{}_{}_{}_{}_{}_{}_{}_{}_{}_{}.png".format(duration, num_agents, infection_distance, infection_probability, minimum_infection_duration, recovery_probability, vaccine_availability_day, daily_vaccine_distribution_count, initial_vaccine_efficacy, vaccinated_recovery_reduction, essential_worker_proportion, infection_probability_increase, complete_rollout_day))
+    plt.savefig("plot_targeted_vaccine_sim_{}_{}_{}_{}_{}_{}_{}_{}_{}_{}_{}_{}_{}.png".format(duration, num_agents, infection_distance, infection_probability, minimum_infection_duration, recovery_probability, vaccine_availability_day, daily_vaccine_distribution_count, initial_vaccine_efficacy, vaccinated_recovery_reduction, immunodeficient_proportion, infection_probability_increase, complete_rollout_day))
 
 if __name__ == "__main__":
     duration = int(sys.argv[1])
@@ -75,11 +75,11 @@ if __name__ == "__main__":
     daily_vaccine_distribution_count = int(sys.argv[8])
     initial_vaccine_efficacy = float(sys.argv[9])
     vaccinated_recovery_reduction = int(sys.argv[10])
-    essential_worker_proportion = float(sys.argv[11])
+    immunodeficient_proportion = float(sys.argv[11])
     infection_probability_increase = float(sys.argv[12])
     complete_rollout_day = float(sys.argv[13])
 
     start_time = time.time()
-    main(duration, num_agents, infection_distance, infection_probability, minimum_infection_duration, recovery_probability, vaccine_availability_day, daily_vaccine_distribution_count, initial_vaccine_efficacy, vaccinated_recovery_reduction, essential_worker_proportion, infection_probability_increase, complete_rollout_day)
+    main(duration, num_agents, infection_distance, infection_probability, minimum_infection_duration, recovery_probability, vaccine_availability_day, daily_vaccine_distribution_count, initial_vaccine_efficacy, vaccinated_recovery_reduction, immunodeficient_proportion, infection_probability_increase, complete_rollout_day)
     end_time = time.time()
     print(f"Model runtime: {end_time - start_time}")
