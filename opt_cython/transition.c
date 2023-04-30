@@ -1363,11 +1363,13 @@ static const char __pyx_k_recover[] = "recover";
 static const char __pyx_k_distance[] = "distance";
 static const char __pyx_k_location[] = "location";
 static const char __pyx_k_agent_list[] = "agent_list";
+static const char __pyx_k_targetable[] = "targetable";
 static const char __pyx_k_transition[] = "transition";
 static const char __pyx_k_vaccinated[] = "vaccinated";
 static const char __pyx_k_current_day[] = "current_day";
 static const char __pyx_k_infected_agent[] = "infected_agent";
 static const char __pyx_k_transition_pyx[] = "transition.pyx";
+static const char __pyx_k_immunodeficient[] = "immunodeficient";
 static const char __pyx_k_infected_agents[] = "infected_agents";
 static const char __pyx_k_selected_agents[] = "selected_agents";
 static const char __pyx_k_days_with_status[] = "days_with_status";
@@ -1384,8 +1386,10 @@ static const char __pyx_k_reset_days_with_status[] = "reset_days_with_status";
 static const char __pyx_k_vaccine_availability_day[] = "vaccine_availability_day";
 static const char __pyx_k_distribute_random_vaccine[] = "distribute_random_vaccine";
 static const char __pyx_k_minimum_infection_duration[] = "minimum_infection_duration";
+static const char __pyx_k_distribute_targeted_vaccine[] = "distribute_targeted_vaccine";
 static const char __pyx_k_vaccinated_recovery_reduction[] = "vaccinated_recovery_reduction";
 static const char __pyx_k_adjusted_infection_probability[] = "adjusted_infection_probability";
+static const char __pyx_k_infection_probability_increase[] = "infection_probability_increase";
 static const char __pyx_k_daily_vaccine_distribution_count[] = "daily_vaccine_distribution_count";
 static PyObject *__pyx_n_s_Agent;
 static PyObject *__pyx_n_s_I;
@@ -1401,6 +1405,8 @@ static PyObject *__pyx_n_s_daily_vaccine_distribution_count;
 static PyObject *__pyx_n_s_days_with_status;
 static PyObject *__pyx_n_s_distance;
 static PyObject *__pyx_n_s_distribute_random_vaccine;
+static PyObject *__pyx_n_s_distribute_targeted_vaccine;
+static PyObject *__pyx_n_s_immunodeficient;
 static PyObject *__pyx_n_s_import;
 static PyObject *__pyx_n_s_infect;
 static PyObject *__pyx_n_s_infected_agent;
@@ -1408,6 +1414,7 @@ static PyObject *__pyx_n_s_infected_agents;
 static PyObject *__pyx_n_s_infected_location;
 static PyObject *__pyx_n_s_infection_distance;
 static PyObject *__pyx_n_s_infection_probability;
+static PyObject *__pyx_n_s_infection_probability_increase;
 static PyObject *__pyx_n_s_location;
 static PyObject *__pyx_n_s_main;
 static PyObject *__pyx_n_s_math;
@@ -1424,6 +1431,7 @@ static PyObject *__pyx_n_s_status;
 static PyObject *__pyx_n_s_susceptible_agent;
 static PyObject *__pyx_n_s_susceptible_agents;
 static PyObject *__pyx_n_s_susceptible_location;
+static PyObject *__pyx_n_s_targetable;
 static PyObject *__pyx_n_s_test;
 static PyObject *__pyx_n_s_transition;
 static PyObject *__pyx_kp_s_transition_pyx;
@@ -1432,16 +1440,19 @@ static PyObject *__pyx_n_s_vaccinated_recovery_reduction;
 static PyObject *__pyx_n_s_vaccine_availability_day;
 static PyObject *__pyx_n_s_vaccine_efficacy;
 static PyObject *__pyx_pf_10transition_distribute_random_vaccine(CYTHON_UNUSED PyObject *__pyx_self, PyObject *__pyx_v_agent_list, int __pyx_v_vaccine_availability_day, int __pyx_v_daily_vaccine_distribution_count, float __pyx_v_vaccine_efficacy, int __pyx_v_current_day); /* proto */
-static PyObject *__pyx_pf_10transition_2infect(CYTHON_UNUSED PyObject *__pyx_self, PyObject *__pyx_v_agent_list, float __pyx_v_infection_distance, float __pyx_v_infection_probability); /* proto */
-static PyObject *__pyx_pf_10transition_4recover(CYTHON_UNUSED PyObject *__pyx_self, PyObject *__pyx_v_agents, int __pyx_v_minimum_infection_duration, float __pyx_v_recovery_probability, int __pyx_v_vaccinated_recovery_reduction); /* proto */
+static PyObject *__pyx_pf_10transition_2distribute_targeted_vaccine(CYTHON_UNUSED PyObject *__pyx_self, PyObject *__pyx_v_agent_list, int __pyx_v_vaccine_availability_day, int __pyx_v_daily_vaccine_distribution_count, float __pyx_v_vaccine_efficacy, int __pyx_v_current_day); /* proto */
+static PyObject *__pyx_pf_10transition_4infect(CYTHON_UNUSED PyObject *__pyx_self, PyObject *__pyx_v_agent_list, float __pyx_v_infection_distance, float __pyx_v_infection_probability, float __pyx_v_infection_probability_increase); /* proto */
+static PyObject *__pyx_pf_10transition_6recover(CYTHON_UNUSED PyObject *__pyx_self, PyObject *__pyx_v_agents, int __pyx_v_minimum_infection_duration, float __pyx_v_recovery_probability, int __pyx_v_vaccinated_recovery_reduction); /* proto */
 static PyObject *__pyx_int_1;
 static PyObject *__pyx_int_2;
 static PyObject *__pyx_tuple_;
 static PyObject *__pyx_tuple__3;
 static PyObject *__pyx_tuple__5;
+static PyObject *__pyx_tuple__7;
 static PyObject *__pyx_codeobj__2;
 static PyObject *__pyx_codeobj__4;
 static PyObject *__pyx_codeobj__6;
+static PyObject *__pyx_codeobj__8;
 /* Late includes */
 
 /* "transition.pyx":5
@@ -1790,7 +1801,7 @@ static PyObject *__pyx_pf_10transition_distribute_random_vaccine(CYTHON_UNUSED P
  *             agent.vaccinated = True
  *             agent.vaccine_efficacy = vaccine_efficacy             # <<<<<<<<<<<<<<
  * 
- * def infect(agent_list, float infection_distance, float infection_probability):
+ * def distribute_targeted_vaccine(agent_list, int vaccine_availability_day, int daily_vaccine_distribution_count, float vaccine_efficacy=0.95, int current_day=0):
  */
       __pyx_t_6 = PyFloat_FromDouble(__pyx_v_vaccine_efficacy); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 25, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_6);
@@ -1847,19 +1858,428 @@ static PyObject *__pyx_pf_10transition_distribute_random_vaccine(CYTHON_UNUSED P
 /* "transition.pyx":27
  *             agent.vaccine_efficacy = vaccine_efficacy
  * 
- * def infect(agent_list, float infection_distance, float infection_probability):             # <<<<<<<<<<<<<<
+ * def distribute_targeted_vaccine(agent_list, int vaccine_availability_day, int daily_vaccine_distribution_count, float vaccine_efficacy=0.95, int current_day=0):             # <<<<<<<<<<<<<<
+ *     """
+ *     Distributes a specific number of vaccines to susceptible and targetable agents in agent list after the vaccine becomes available.
+ */
+
+/* Python wrapper */
+static PyObject *__pyx_pw_10transition_3distribute_targeted_vaccine(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
+static char __pyx_doc_10transition_2distribute_targeted_vaccine[] = "\n    Distributes a specific number of vaccines to susceptible and targetable agents in agent list after the vaccine becomes available.\n\n    Args:\n    - agent_list (list): A list of Agent objects.\n    - vaccine_availability_day (int): The day when the vaccine becomes available.\n    - daily_vaccine_distribution_count (int): The number of vaccines distributed daily after the vaccine becomes available.\n    - vaccine_efficacy (float): A float between 0 and 1 representing the initial efficacy of the vaccine.\n    - current_day (int): The current day of the simulation.\n\n    Returns:\n    - None\n    ";
+static PyMethodDef __pyx_mdef_10transition_3distribute_targeted_vaccine = {"distribute_targeted_vaccine", (PyCFunction)(void*)(PyCFunctionWithKeywords)__pyx_pw_10transition_3distribute_targeted_vaccine, METH_VARARGS|METH_KEYWORDS, __pyx_doc_10transition_2distribute_targeted_vaccine};
+static PyObject *__pyx_pw_10transition_3distribute_targeted_vaccine(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
+  PyObject *__pyx_v_agent_list = 0;
+  int __pyx_v_vaccine_availability_day;
+  int __pyx_v_daily_vaccine_distribution_count;
+  float __pyx_v_vaccine_efficacy;
+  int __pyx_v_current_day;
+  int __pyx_lineno = 0;
+  const char *__pyx_filename = NULL;
+  int __pyx_clineno = 0;
+  PyObject *__pyx_r = 0;
+  __Pyx_RefNannyDeclarations
+  __Pyx_RefNannySetupContext("distribute_targeted_vaccine (wrapper)", 0);
+  {
+    static PyObject **__pyx_pyargnames[] = {&__pyx_n_s_agent_list,&__pyx_n_s_vaccine_availability_day,&__pyx_n_s_daily_vaccine_distribution_count,&__pyx_n_s_vaccine_efficacy,&__pyx_n_s_current_day,0};
+    PyObject* values[5] = {0,0,0,0,0};
+    if (unlikely(__pyx_kwds)) {
+      Py_ssize_t kw_args;
+      const Py_ssize_t pos_args = PyTuple_GET_SIZE(__pyx_args);
+      switch (pos_args) {
+        case  5: values[4] = PyTuple_GET_ITEM(__pyx_args, 4);
+        CYTHON_FALLTHROUGH;
+        case  4: values[3] = PyTuple_GET_ITEM(__pyx_args, 3);
+        CYTHON_FALLTHROUGH;
+        case  3: values[2] = PyTuple_GET_ITEM(__pyx_args, 2);
+        CYTHON_FALLTHROUGH;
+        case  2: values[1] = PyTuple_GET_ITEM(__pyx_args, 1);
+        CYTHON_FALLTHROUGH;
+        case  1: values[0] = PyTuple_GET_ITEM(__pyx_args, 0);
+        CYTHON_FALLTHROUGH;
+        case  0: break;
+        default: goto __pyx_L5_argtuple_error;
+      }
+      kw_args = PyDict_Size(__pyx_kwds);
+      switch (pos_args) {
+        case  0:
+        if (likely((values[0] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_agent_list)) != 0)) kw_args--;
+        else goto __pyx_L5_argtuple_error;
+        CYTHON_FALLTHROUGH;
+        case  1:
+        if (likely((values[1] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_vaccine_availability_day)) != 0)) kw_args--;
+        else {
+          __Pyx_RaiseArgtupleInvalid("distribute_targeted_vaccine", 0, 3, 5, 1); __PYX_ERR(0, 27, __pyx_L3_error)
+        }
+        CYTHON_FALLTHROUGH;
+        case  2:
+        if (likely((values[2] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_daily_vaccine_distribution_count)) != 0)) kw_args--;
+        else {
+          __Pyx_RaiseArgtupleInvalid("distribute_targeted_vaccine", 0, 3, 5, 2); __PYX_ERR(0, 27, __pyx_L3_error)
+        }
+        CYTHON_FALLTHROUGH;
+        case  3:
+        if (kw_args > 0) {
+          PyObject* value = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_vaccine_efficacy);
+          if (value) { values[3] = value; kw_args--; }
+        }
+        CYTHON_FALLTHROUGH;
+        case  4:
+        if (kw_args > 0) {
+          PyObject* value = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_current_day);
+          if (value) { values[4] = value; kw_args--; }
+        }
+      }
+      if (unlikely(kw_args > 0)) {
+        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "distribute_targeted_vaccine") < 0)) __PYX_ERR(0, 27, __pyx_L3_error)
+      }
+    } else {
+      switch (PyTuple_GET_SIZE(__pyx_args)) {
+        case  5: values[4] = PyTuple_GET_ITEM(__pyx_args, 4);
+        CYTHON_FALLTHROUGH;
+        case  4: values[3] = PyTuple_GET_ITEM(__pyx_args, 3);
+        CYTHON_FALLTHROUGH;
+        case  3: values[2] = PyTuple_GET_ITEM(__pyx_args, 2);
+        values[1] = PyTuple_GET_ITEM(__pyx_args, 1);
+        values[0] = PyTuple_GET_ITEM(__pyx_args, 0);
+        break;
+        default: goto __pyx_L5_argtuple_error;
+      }
+    }
+    __pyx_v_agent_list = values[0];
+    __pyx_v_vaccine_availability_day = __Pyx_PyInt_As_int(values[1]); if (unlikely((__pyx_v_vaccine_availability_day == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 27, __pyx_L3_error)
+    __pyx_v_daily_vaccine_distribution_count = __Pyx_PyInt_As_int(values[2]); if (unlikely((__pyx_v_daily_vaccine_distribution_count == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 27, __pyx_L3_error)
+    if (values[3]) {
+      __pyx_v_vaccine_efficacy = __pyx_PyFloat_AsFloat(values[3]); if (unlikely((__pyx_v_vaccine_efficacy == (float)-1) && PyErr_Occurred())) __PYX_ERR(0, 27, __pyx_L3_error)
+    } else {
+      __pyx_v_vaccine_efficacy = ((float)0.95);
+    }
+    if (values[4]) {
+      __pyx_v_current_day = __Pyx_PyInt_As_int(values[4]); if (unlikely((__pyx_v_current_day == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 27, __pyx_L3_error)
+    } else {
+      __pyx_v_current_day = ((int)0);
+    }
+  }
+  goto __pyx_L4_argument_unpacking_done;
+  __pyx_L5_argtuple_error:;
+  __Pyx_RaiseArgtupleInvalid("distribute_targeted_vaccine", 0, 3, 5, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(0, 27, __pyx_L3_error)
+  __pyx_L3_error:;
+  __Pyx_AddTraceback("transition.distribute_targeted_vaccine", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __Pyx_RefNannyFinishContext();
+  return NULL;
+  __pyx_L4_argument_unpacking_done:;
+  __pyx_r = __pyx_pf_10transition_2distribute_targeted_vaccine(__pyx_self, __pyx_v_agent_list, __pyx_v_vaccine_availability_day, __pyx_v_daily_vaccine_distribution_count, __pyx_v_vaccine_efficacy, __pyx_v_current_day);
+
+  /* function exit code */
+  __Pyx_RefNannyFinishContext();
+  return __pyx_r;
+}
+
+static PyObject *__pyx_pf_10transition_2distribute_targeted_vaccine(CYTHON_UNUSED PyObject *__pyx_self, PyObject *__pyx_v_agent_list, int __pyx_v_vaccine_availability_day, int __pyx_v_daily_vaccine_distribution_count, float __pyx_v_vaccine_efficacy, int __pyx_v_current_day) {
+  PyObject *__pyx_v_susceptible_agents = NULL;
+  PyObject *__pyx_v_selected_agents = NULL;
+  PyObject *__pyx_v_agent = NULL;
+  PyObject *__pyx_r = NULL;
+  __Pyx_RefNannyDeclarations
+  int __pyx_t_1;
+  PyObject *__pyx_t_2 = NULL;
+  PyObject *__pyx_t_3 = NULL;
+  Py_ssize_t __pyx_t_4;
+  PyObject *(*__pyx_t_5)(PyObject *);
+  PyObject *__pyx_t_6 = NULL;
+  PyObject *__pyx_t_7 = NULL;
+  int __pyx_t_8;
+  Py_ssize_t __pyx_t_9;
+  PyObject *__pyx_t_10 = NULL;
+  int __pyx_lineno = 0;
+  const char *__pyx_filename = NULL;
+  int __pyx_clineno = 0;
+  __Pyx_RefNannySetupContext("distribute_targeted_vaccine", 0);
+
+  /* "transition.pyx":41
+ *     - None
+ *     """
+ *     if current_day >= vaccine_availability_day:             # <<<<<<<<<<<<<<
+ *         susceptible_agents = [agent for agent in agent_list if agent.status == "S" if agent.targetable == True]
+ *         selected_agents = random.sample(susceptible_agents, min(daily_vaccine_distribution_count, len(susceptible_agents)))
+ */
+  __pyx_t_1 = ((__pyx_v_current_day >= __pyx_v_vaccine_availability_day) != 0);
+  if (__pyx_t_1) {
+
+    /* "transition.pyx":42
+ *     """
+ *     if current_day >= vaccine_availability_day:
+ *         susceptible_agents = [agent for agent in agent_list if agent.status == "S" if agent.targetable == True]             # <<<<<<<<<<<<<<
+ *         selected_agents = random.sample(susceptible_agents, min(daily_vaccine_distribution_count, len(susceptible_agents)))
+ * 
+ */
+    __pyx_t_2 = PyList_New(0); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 42, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_2);
+    if (likely(PyList_CheckExact(__pyx_v_agent_list)) || PyTuple_CheckExact(__pyx_v_agent_list)) {
+      __pyx_t_3 = __pyx_v_agent_list; __Pyx_INCREF(__pyx_t_3); __pyx_t_4 = 0;
+      __pyx_t_5 = NULL;
+    } else {
+      __pyx_t_4 = -1; __pyx_t_3 = PyObject_GetIter(__pyx_v_agent_list); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 42, __pyx_L1_error)
+      __Pyx_GOTREF(__pyx_t_3);
+      __pyx_t_5 = Py_TYPE(__pyx_t_3)->tp_iternext; if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 42, __pyx_L1_error)
+    }
+    for (;;) {
+      if (likely(!__pyx_t_5)) {
+        if (likely(PyList_CheckExact(__pyx_t_3))) {
+          if (__pyx_t_4 >= PyList_GET_SIZE(__pyx_t_3)) break;
+          #if CYTHON_ASSUME_SAFE_MACROS && !CYTHON_AVOID_BORROWED_REFS
+          __pyx_t_6 = PyList_GET_ITEM(__pyx_t_3, __pyx_t_4); __Pyx_INCREF(__pyx_t_6); __pyx_t_4++; if (unlikely(0 < 0)) __PYX_ERR(0, 42, __pyx_L1_error)
+          #else
+          __pyx_t_6 = PySequence_ITEM(__pyx_t_3, __pyx_t_4); __pyx_t_4++; if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 42, __pyx_L1_error)
+          __Pyx_GOTREF(__pyx_t_6);
+          #endif
+        } else {
+          if (__pyx_t_4 >= PyTuple_GET_SIZE(__pyx_t_3)) break;
+          #if CYTHON_ASSUME_SAFE_MACROS && !CYTHON_AVOID_BORROWED_REFS
+          __pyx_t_6 = PyTuple_GET_ITEM(__pyx_t_3, __pyx_t_4); __Pyx_INCREF(__pyx_t_6); __pyx_t_4++; if (unlikely(0 < 0)) __PYX_ERR(0, 42, __pyx_L1_error)
+          #else
+          __pyx_t_6 = PySequence_ITEM(__pyx_t_3, __pyx_t_4); __pyx_t_4++; if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 42, __pyx_L1_error)
+          __Pyx_GOTREF(__pyx_t_6);
+          #endif
+        }
+      } else {
+        __pyx_t_6 = __pyx_t_5(__pyx_t_3);
+        if (unlikely(!__pyx_t_6)) {
+          PyObject* exc_type = PyErr_Occurred();
+          if (exc_type) {
+            if (likely(__Pyx_PyErr_GivenExceptionMatches(exc_type, PyExc_StopIteration))) PyErr_Clear();
+            else __PYX_ERR(0, 42, __pyx_L1_error)
+          }
+          break;
+        }
+        __Pyx_GOTREF(__pyx_t_6);
+      }
+      __Pyx_XDECREF_SET(__pyx_v_agent, __pyx_t_6);
+      __pyx_t_6 = 0;
+      __pyx_t_6 = __Pyx_PyObject_GetAttrStr(__pyx_v_agent, __pyx_n_s_status); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 42, __pyx_L1_error)
+      __Pyx_GOTREF(__pyx_t_6);
+      __pyx_t_1 = (__Pyx_PyString_Equals(__pyx_t_6, __pyx_n_s_S, Py_EQ)); if (unlikely(__pyx_t_1 < 0)) __PYX_ERR(0, 42, __pyx_L1_error)
+      __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
+      if (__pyx_t_1) {
+        __pyx_t_6 = __Pyx_PyObject_GetAttrStr(__pyx_v_agent, __pyx_n_s_targetable); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 42, __pyx_L1_error)
+        __Pyx_GOTREF(__pyx_t_6);
+        __pyx_t_7 = PyObject_RichCompare(__pyx_t_6, Py_True, Py_EQ); __Pyx_XGOTREF(__pyx_t_7); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 42, __pyx_L1_error)
+        __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
+        __pyx_t_1 = __Pyx_PyObject_IsTrue(__pyx_t_7); if (unlikely(__pyx_t_1 < 0)) __PYX_ERR(0, 42, __pyx_L1_error)
+        __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
+        if (__pyx_t_1) {
+          if (unlikely(__Pyx_ListComp_Append(__pyx_t_2, (PyObject*)__pyx_v_agent))) __PYX_ERR(0, 42, __pyx_L1_error)
+        }
+      }
+    }
+    __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
+    __pyx_v_susceptible_agents = ((PyObject*)__pyx_t_2);
+    __pyx_t_2 = 0;
+
+    /* "transition.pyx":43
+ *     if current_day >= vaccine_availability_day:
+ *         susceptible_agents = [agent for agent in agent_list if agent.status == "S" if agent.targetable == True]
+ *         selected_agents = random.sample(susceptible_agents, min(daily_vaccine_distribution_count, len(susceptible_agents)))             # <<<<<<<<<<<<<<
+ * 
+ *         for agent in selected_agents:
+ */
+    __Pyx_GetModuleGlobalName(__pyx_t_3, __pyx_n_s_random); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 43, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_3);
+    __pyx_t_7 = __Pyx_PyObject_GetAttrStr(__pyx_t_3, __pyx_n_s_sample); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 43, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_7);
+    __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
+    __pyx_t_4 = PyList_GET_SIZE(__pyx_v_susceptible_agents); if (unlikely(__pyx_t_4 == ((Py_ssize_t)-1))) __PYX_ERR(0, 43, __pyx_L1_error)
+    __pyx_t_8 = __pyx_v_daily_vaccine_distribution_count;
+    if (((__pyx_t_4 < __pyx_t_8) != 0)) {
+      __pyx_t_9 = __pyx_t_4;
+    } else {
+      __pyx_t_9 = __pyx_t_8;
+    }
+    __pyx_t_3 = PyInt_FromSsize_t(__pyx_t_9); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 43, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_3);
+    __pyx_t_6 = NULL;
+    __pyx_t_8 = 0;
+    if (CYTHON_UNPACK_METHODS && unlikely(PyMethod_Check(__pyx_t_7))) {
+      __pyx_t_6 = PyMethod_GET_SELF(__pyx_t_7);
+      if (likely(__pyx_t_6)) {
+        PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_7);
+        __Pyx_INCREF(__pyx_t_6);
+        __Pyx_INCREF(function);
+        __Pyx_DECREF_SET(__pyx_t_7, function);
+        __pyx_t_8 = 1;
+      }
+    }
+    #if CYTHON_FAST_PYCALL
+    if (PyFunction_Check(__pyx_t_7)) {
+      PyObject *__pyx_temp[3] = {__pyx_t_6, __pyx_v_susceptible_agents, __pyx_t_3};
+      __pyx_t_2 = __Pyx_PyFunction_FastCall(__pyx_t_7, __pyx_temp+1-__pyx_t_8, 2+__pyx_t_8); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 43, __pyx_L1_error)
+      __Pyx_XDECREF(__pyx_t_6); __pyx_t_6 = 0;
+      __Pyx_GOTREF(__pyx_t_2);
+      __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
+    } else
+    #endif
+    #if CYTHON_FAST_PYCCALL
+    if (__Pyx_PyFastCFunction_Check(__pyx_t_7)) {
+      PyObject *__pyx_temp[3] = {__pyx_t_6, __pyx_v_susceptible_agents, __pyx_t_3};
+      __pyx_t_2 = __Pyx_PyCFunction_FastCall(__pyx_t_7, __pyx_temp+1-__pyx_t_8, 2+__pyx_t_8); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 43, __pyx_L1_error)
+      __Pyx_XDECREF(__pyx_t_6); __pyx_t_6 = 0;
+      __Pyx_GOTREF(__pyx_t_2);
+      __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
+    } else
+    #endif
+    {
+      __pyx_t_10 = PyTuple_New(2+__pyx_t_8); if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 43, __pyx_L1_error)
+      __Pyx_GOTREF(__pyx_t_10);
+      if (__pyx_t_6) {
+        __Pyx_GIVEREF(__pyx_t_6); PyTuple_SET_ITEM(__pyx_t_10, 0, __pyx_t_6); __pyx_t_6 = NULL;
+      }
+      __Pyx_INCREF(__pyx_v_susceptible_agents);
+      __Pyx_GIVEREF(__pyx_v_susceptible_agents);
+      PyTuple_SET_ITEM(__pyx_t_10, 0+__pyx_t_8, __pyx_v_susceptible_agents);
+      __Pyx_GIVEREF(__pyx_t_3);
+      PyTuple_SET_ITEM(__pyx_t_10, 1+__pyx_t_8, __pyx_t_3);
+      __pyx_t_3 = 0;
+      __pyx_t_2 = __Pyx_PyObject_Call(__pyx_t_7, __pyx_t_10, NULL); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 43, __pyx_L1_error)
+      __Pyx_GOTREF(__pyx_t_2);
+      __Pyx_DECREF(__pyx_t_10); __pyx_t_10 = 0;
+    }
+    __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
+    __pyx_v_selected_agents = __pyx_t_2;
+    __pyx_t_2 = 0;
+
+    /* "transition.pyx":45
+ *         selected_agents = random.sample(susceptible_agents, min(daily_vaccine_distribution_count, len(susceptible_agents)))
+ * 
+ *         for agent in selected_agents:             # <<<<<<<<<<<<<<
+ *             agent.vaccinated = True
+ *             agent.vaccine_efficacy = vaccine_efficacy
+ */
+    if (likely(PyList_CheckExact(__pyx_v_selected_agents)) || PyTuple_CheckExact(__pyx_v_selected_agents)) {
+      __pyx_t_2 = __pyx_v_selected_agents; __Pyx_INCREF(__pyx_t_2); __pyx_t_9 = 0;
+      __pyx_t_5 = NULL;
+    } else {
+      __pyx_t_9 = -1; __pyx_t_2 = PyObject_GetIter(__pyx_v_selected_agents); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 45, __pyx_L1_error)
+      __Pyx_GOTREF(__pyx_t_2);
+      __pyx_t_5 = Py_TYPE(__pyx_t_2)->tp_iternext; if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 45, __pyx_L1_error)
+    }
+    for (;;) {
+      if (likely(!__pyx_t_5)) {
+        if (likely(PyList_CheckExact(__pyx_t_2))) {
+          if (__pyx_t_9 >= PyList_GET_SIZE(__pyx_t_2)) break;
+          #if CYTHON_ASSUME_SAFE_MACROS && !CYTHON_AVOID_BORROWED_REFS
+          __pyx_t_7 = PyList_GET_ITEM(__pyx_t_2, __pyx_t_9); __Pyx_INCREF(__pyx_t_7); __pyx_t_9++; if (unlikely(0 < 0)) __PYX_ERR(0, 45, __pyx_L1_error)
+          #else
+          __pyx_t_7 = PySequence_ITEM(__pyx_t_2, __pyx_t_9); __pyx_t_9++; if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 45, __pyx_L1_error)
+          __Pyx_GOTREF(__pyx_t_7);
+          #endif
+        } else {
+          if (__pyx_t_9 >= PyTuple_GET_SIZE(__pyx_t_2)) break;
+          #if CYTHON_ASSUME_SAFE_MACROS && !CYTHON_AVOID_BORROWED_REFS
+          __pyx_t_7 = PyTuple_GET_ITEM(__pyx_t_2, __pyx_t_9); __Pyx_INCREF(__pyx_t_7); __pyx_t_9++; if (unlikely(0 < 0)) __PYX_ERR(0, 45, __pyx_L1_error)
+          #else
+          __pyx_t_7 = PySequence_ITEM(__pyx_t_2, __pyx_t_9); __pyx_t_9++; if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 45, __pyx_L1_error)
+          __Pyx_GOTREF(__pyx_t_7);
+          #endif
+        }
+      } else {
+        __pyx_t_7 = __pyx_t_5(__pyx_t_2);
+        if (unlikely(!__pyx_t_7)) {
+          PyObject* exc_type = PyErr_Occurred();
+          if (exc_type) {
+            if (likely(__Pyx_PyErr_GivenExceptionMatches(exc_type, PyExc_StopIteration))) PyErr_Clear();
+            else __PYX_ERR(0, 45, __pyx_L1_error)
+          }
+          break;
+        }
+        __Pyx_GOTREF(__pyx_t_7);
+      }
+      __Pyx_XDECREF_SET(__pyx_v_agent, __pyx_t_7);
+      __pyx_t_7 = 0;
+
+      /* "transition.pyx":46
+ * 
+ *         for agent in selected_agents:
+ *             agent.vaccinated = True             # <<<<<<<<<<<<<<
+ *             agent.vaccine_efficacy = vaccine_efficacy
+ * 
+ */
+      if (__Pyx_PyObject_SetAttrStr(__pyx_v_agent, __pyx_n_s_vaccinated, Py_True) < 0) __PYX_ERR(0, 46, __pyx_L1_error)
+
+      /* "transition.pyx":47
+ *         for agent in selected_agents:
+ *             agent.vaccinated = True
+ *             agent.vaccine_efficacy = vaccine_efficacy             # <<<<<<<<<<<<<<
+ * 
+ * def infect(agent_list, float infection_distance, float infection_probability, float infection_probability_increase = 0.4):
+ */
+      __pyx_t_7 = PyFloat_FromDouble(__pyx_v_vaccine_efficacy); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 47, __pyx_L1_error)
+      __Pyx_GOTREF(__pyx_t_7);
+      if (__Pyx_PyObject_SetAttrStr(__pyx_v_agent, __pyx_n_s_vaccine_efficacy, __pyx_t_7) < 0) __PYX_ERR(0, 47, __pyx_L1_error)
+      __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
+
+      /* "transition.pyx":45
+ *         selected_agents = random.sample(susceptible_agents, min(daily_vaccine_distribution_count, len(susceptible_agents)))
+ * 
+ *         for agent in selected_agents:             # <<<<<<<<<<<<<<
+ *             agent.vaccinated = True
+ *             agent.vaccine_efficacy = vaccine_efficacy
+ */
+    }
+    __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
+
+    /* "transition.pyx":41
+ *     - None
+ *     """
+ *     if current_day >= vaccine_availability_day:             # <<<<<<<<<<<<<<
+ *         susceptible_agents = [agent for agent in agent_list if agent.status == "S" if agent.targetable == True]
+ *         selected_agents = random.sample(susceptible_agents, min(daily_vaccine_distribution_count, len(susceptible_agents)))
+ */
+  }
+
+  /* "transition.pyx":27
+ *             agent.vaccine_efficacy = vaccine_efficacy
+ * 
+ * def distribute_targeted_vaccine(agent_list, int vaccine_availability_day, int daily_vaccine_distribution_count, float vaccine_efficacy=0.95, int current_day=0):             # <<<<<<<<<<<<<<
+ *     """
+ *     Distributes a specific number of vaccines to susceptible and targetable agents in agent list after the vaccine becomes available.
+ */
+
+  /* function exit code */
+  __pyx_r = Py_None; __Pyx_INCREF(Py_None);
+  goto __pyx_L0;
+  __pyx_L1_error:;
+  __Pyx_XDECREF(__pyx_t_2);
+  __Pyx_XDECREF(__pyx_t_3);
+  __Pyx_XDECREF(__pyx_t_6);
+  __Pyx_XDECREF(__pyx_t_7);
+  __Pyx_XDECREF(__pyx_t_10);
+  __Pyx_AddTraceback("transition.distribute_targeted_vaccine", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __pyx_r = NULL;
+  __pyx_L0:;
+  __Pyx_XDECREF(__pyx_v_susceptible_agents);
+  __Pyx_XDECREF(__pyx_v_selected_agents);
+  __Pyx_XDECREF(__pyx_v_agent);
+  __Pyx_XGIVEREF(__pyx_r);
+  __Pyx_RefNannyFinishContext();
+  return __pyx_r;
+}
+
+/* "transition.pyx":49
+ *             agent.vaccine_efficacy = vaccine_efficacy
+ * 
+ * def infect(agent_list, float infection_distance, float infection_probability, float infection_probability_increase = 0.4):             # <<<<<<<<<<<<<<
  *     """
  *     Infects any susceptible agents within a given distance of an infected agent, with a given infection probability.
  */
 
 /* Python wrapper */
-static PyObject *__pyx_pw_10transition_3infect(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
-static char __pyx_doc_10transition_2infect[] = "\n    Infects any susceptible agents within a given distance of an infected agent, with a given infection probability.\n\n    Args:\n    - agent_list: A list of agents.\n    - infection_distance: A float representing the maximum distance at which other agents can be infected.\n    - infection_probability: A float representing the probability of infection if an agent is within infection_distance.\n\n    Returns:\n    - None\n    ";
-static PyMethodDef __pyx_mdef_10transition_3infect = {"infect", (PyCFunction)(void*)(PyCFunctionWithKeywords)__pyx_pw_10transition_3infect, METH_VARARGS|METH_KEYWORDS, __pyx_doc_10transition_2infect};
-static PyObject *__pyx_pw_10transition_3infect(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
+static PyObject *__pyx_pw_10transition_5infect(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
+static char __pyx_doc_10transition_4infect[] = "\n    Infects any susceptible agents within a given distance of an infected agent, with a given infection probability.\n\n    Args:\n    - agent_list: A list of agents.\n    - infection_distance: A float representing the maximum distance at which other agents can be infected.\n    - infection_probability: A float representing the probability of infection if an agent is within infection_distance.\n\n    Returns:\n    - None\n    ";
+static PyMethodDef __pyx_mdef_10transition_5infect = {"infect", (PyCFunction)(void*)(PyCFunctionWithKeywords)__pyx_pw_10transition_5infect, METH_VARARGS|METH_KEYWORDS, __pyx_doc_10transition_4infect};
+static PyObject *__pyx_pw_10transition_5infect(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
   PyObject *__pyx_v_agent_list = 0;
   float __pyx_v_infection_distance;
   float __pyx_v_infection_probability;
+  float __pyx_v_infection_probability_increase;
   int __pyx_lineno = 0;
   const char *__pyx_filename = NULL;
   int __pyx_clineno = 0;
@@ -1867,12 +2287,14 @@ static PyObject *__pyx_pw_10transition_3infect(PyObject *__pyx_self, PyObject *_
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("infect (wrapper)", 0);
   {
-    static PyObject **__pyx_pyargnames[] = {&__pyx_n_s_agent_list,&__pyx_n_s_infection_distance,&__pyx_n_s_infection_probability,0};
-    PyObject* values[3] = {0,0,0};
+    static PyObject **__pyx_pyargnames[] = {&__pyx_n_s_agent_list,&__pyx_n_s_infection_distance,&__pyx_n_s_infection_probability,&__pyx_n_s_infection_probability_increase,0};
+    PyObject* values[4] = {0,0,0,0};
     if (unlikely(__pyx_kwds)) {
       Py_ssize_t kw_args;
       const Py_ssize_t pos_args = PyTuple_GET_SIZE(__pyx_args);
       switch (pos_args) {
+        case  4: values[3] = PyTuple_GET_ITEM(__pyx_args, 3);
+        CYTHON_FALLTHROUGH;
         case  3: values[2] = PyTuple_GET_ITEM(__pyx_args, 2);
         CYTHON_FALLTHROUGH;
         case  2: values[1] = PyTuple_GET_ITEM(__pyx_args, 1);
@@ -1891,45 +2313,60 @@ static PyObject *__pyx_pw_10transition_3infect(PyObject *__pyx_self, PyObject *_
         case  1:
         if (likely((values[1] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_infection_distance)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("infect", 1, 3, 3, 1); __PYX_ERR(0, 27, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("infect", 0, 3, 4, 1); __PYX_ERR(0, 49, __pyx_L3_error)
         }
         CYTHON_FALLTHROUGH;
         case  2:
         if (likely((values[2] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_infection_probability)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("infect", 1, 3, 3, 2); __PYX_ERR(0, 27, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("infect", 0, 3, 4, 2); __PYX_ERR(0, 49, __pyx_L3_error)
+        }
+        CYTHON_FALLTHROUGH;
+        case  3:
+        if (kw_args > 0) {
+          PyObject* value = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_infection_probability_increase);
+          if (value) { values[3] = value; kw_args--; }
         }
       }
       if (unlikely(kw_args > 0)) {
-        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "infect") < 0)) __PYX_ERR(0, 27, __pyx_L3_error)
+        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "infect") < 0)) __PYX_ERR(0, 49, __pyx_L3_error)
       }
-    } else if (PyTuple_GET_SIZE(__pyx_args) != 3) {
-      goto __pyx_L5_argtuple_error;
     } else {
-      values[0] = PyTuple_GET_ITEM(__pyx_args, 0);
-      values[1] = PyTuple_GET_ITEM(__pyx_args, 1);
-      values[2] = PyTuple_GET_ITEM(__pyx_args, 2);
+      switch (PyTuple_GET_SIZE(__pyx_args)) {
+        case  4: values[3] = PyTuple_GET_ITEM(__pyx_args, 3);
+        CYTHON_FALLTHROUGH;
+        case  3: values[2] = PyTuple_GET_ITEM(__pyx_args, 2);
+        values[1] = PyTuple_GET_ITEM(__pyx_args, 1);
+        values[0] = PyTuple_GET_ITEM(__pyx_args, 0);
+        break;
+        default: goto __pyx_L5_argtuple_error;
+      }
     }
     __pyx_v_agent_list = values[0];
-    __pyx_v_infection_distance = __pyx_PyFloat_AsFloat(values[1]); if (unlikely((__pyx_v_infection_distance == (float)-1) && PyErr_Occurred())) __PYX_ERR(0, 27, __pyx_L3_error)
-    __pyx_v_infection_probability = __pyx_PyFloat_AsFloat(values[2]); if (unlikely((__pyx_v_infection_probability == (float)-1) && PyErr_Occurred())) __PYX_ERR(0, 27, __pyx_L3_error)
+    __pyx_v_infection_distance = __pyx_PyFloat_AsFloat(values[1]); if (unlikely((__pyx_v_infection_distance == (float)-1) && PyErr_Occurred())) __PYX_ERR(0, 49, __pyx_L3_error)
+    __pyx_v_infection_probability = __pyx_PyFloat_AsFloat(values[2]); if (unlikely((__pyx_v_infection_probability == (float)-1) && PyErr_Occurred())) __PYX_ERR(0, 49, __pyx_L3_error)
+    if (values[3]) {
+      __pyx_v_infection_probability_increase = __pyx_PyFloat_AsFloat(values[3]); if (unlikely((__pyx_v_infection_probability_increase == (float)-1) && PyErr_Occurred())) __PYX_ERR(0, 49, __pyx_L3_error)
+    } else {
+      __pyx_v_infection_probability_increase = ((float)0.4);
+    }
   }
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L5_argtuple_error:;
-  __Pyx_RaiseArgtupleInvalid("infect", 1, 3, 3, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(0, 27, __pyx_L3_error)
+  __Pyx_RaiseArgtupleInvalid("infect", 0, 3, 4, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(0, 49, __pyx_L3_error)
   __pyx_L3_error:;
   __Pyx_AddTraceback("transition.infect", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __Pyx_RefNannyFinishContext();
   return NULL;
   __pyx_L4_argument_unpacking_done:;
-  __pyx_r = __pyx_pf_10transition_2infect(__pyx_self, __pyx_v_agent_list, __pyx_v_infection_distance, __pyx_v_infection_probability);
+  __pyx_r = __pyx_pf_10transition_4infect(__pyx_self, __pyx_v_agent_list, __pyx_v_infection_distance, __pyx_v_infection_probability, __pyx_v_infection_probability_increase);
 
   /* function exit code */
   __Pyx_RefNannyFinishContext();
   return __pyx_r;
 }
 
-static PyObject *__pyx_pf_10transition_2infect(CYTHON_UNUSED PyObject *__pyx_self, PyObject *__pyx_v_agent_list, float __pyx_v_infection_distance, float __pyx_v_infection_probability) {
+static PyObject *__pyx_pf_10transition_4infect(CYTHON_UNUSED PyObject *__pyx_self, PyObject *__pyx_v_agent_list, float __pyx_v_infection_distance, float __pyx_v_infection_probability, float __pyx_v_infection_probability_increase) {
   PyObject *__pyx_v_infected_agents = NULL;
   PyObject *__pyx_v_susceptible_agents = NULL;
   PyObject *__pyx_v_infected_agent = NULL;
@@ -1958,39 +2395,39 @@ static PyObject *__pyx_pf_10transition_2infect(CYTHON_UNUSED PyObject *__pyx_sel
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("infect", 0);
 
-  /* "transition.pyx":39
+  /* "transition.pyx":61
  *     - None
  *     """
  *     infected_agents = [agent for agent in agent_list if agent.status == "I"]             # <<<<<<<<<<<<<<
  *     susceptible_agents = [agent for agent in agent_list if agent.status == "S"]
  *     for infected_agent in infected_agents:
  */
-  __pyx_t_1 = PyList_New(0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 39, __pyx_L1_error)
+  __pyx_t_1 = PyList_New(0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 61, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   if (likely(PyList_CheckExact(__pyx_v_agent_list)) || PyTuple_CheckExact(__pyx_v_agent_list)) {
     __pyx_t_2 = __pyx_v_agent_list; __Pyx_INCREF(__pyx_t_2); __pyx_t_3 = 0;
     __pyx_t_4 = NULL;
   } else {
-    __pyx_t_3 = -1; __pyx_t_2 = PyObject_GetIter(__pyx_v_agent_list); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 39, __pyx_L1_error)
+    __pyx_t_3 = -1; __pyx_t_2 = PyObject_GetIter(__pyx_v_agent_list); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 61, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_2);
-    __pyx_t_4 = Py_TYPE(__pyx_t_2)->tp_iternext; if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 39, __pyx_L1_error)
+    __pyx_t_4 = Py_TYPE(__pyx_t_2)->tp_iternext; if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 61, __pyx_L1_error)
   }
   for (;;) {
     if (likely(!__pyx_t_4)) {
       if (likely(PyList_CheckExact(__pyx_t_2))) {
         if (__pyx_t_3 >= PyList_GET_SIZE(__pyx_t_2)) break;
         #if CYTHON_ASSUME_SAFE_MACROS && !CYTHON_AVOID_BORROWED_REFS
-        __pyx_t_5 = PyList_GET_ITEM(__pyx_t_2, __pyx_t_3); __Pyx_INCREF(__pyx_t_5); __pyx_t_3++; if (unlikely(0 < 0)) __PYX_ERR(0, 39, __pyx_L1_error)
+        __pyx_t_5 = PyList_GET_ITEM(__pyx_t_2, __pyx_t_3); __Pyx_INCREF(__pyx_t_5); __pyx_t_3++; if (unlikely(0 < 0)) __PYX_ERR(0, 61, __pyx_L1_error)
         #else
-        __pyx_t_5 = PySequence_ITEM(__pyx_t_2, __pyx_t_3); __pyx_t_3++; if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 39, __pyx_L1_error)
+        __pyx_t_5 = PySequence_ITEM(__pyx_t_2, __pyx_t_3); __pyx_t_3++; if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 61, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_5);
         #endif
       } else {
         if (__pyx_t_3 >= PyTuple_GET_SIZE(__pyx_t_2)) break;
         #if CYTHON_ASSUME_SAFE_MACROS && !CYTHON_AVOID_BORROWED_REFS
-        __pyx_t_5 = PyTuple_GET_ITEM(__pyx_t_2, __pyx_t_3); __Pyx_INCREF(__pyx_t_5); __pyx_t_3++; if (unlikely(0 < 0)) __PYX_ERR(0, 39, __pyx_L1_error)
+        __pyx_t_5 = PyTuple_GET_ITEM(__pyx_t_2, __pyx_t_3); __Pyx_INCREF(__pyx_t_5); __pyx_t_3++; if (unlikely(0 < 0)) __PYX_ERR(0, 61, __pyx_L1_error)
         #else
-        __pyx_t_5 = PySequence_ITEM(__pyx_t_2, __pyx_t_3); __pyx_t_3++; if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 39, __pyx_L1_error)
+        __pyx_t_5 = PySequence_ITEM(__pyx_t_2, __pyx_t_3); __pyx_t_3++; if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 61, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_5);
         #endif
       }
@@ -2000,7 +2437,7 @@ static PyObject *__pyx_pf_10transition_2infect(CYTHON_UNUSED PyObject *__pyx_sel
         PyObject* exc_type = PyErr_Occurred();
         if (exc_type) {
           if (likely(__Pyx_PyErr_GivenExceptionMatches(exc_type, PyExc_StopIteration))) PyErr_Clear();
-          else __PYX_ERR(0, 39, __pyx_L1_error)
+          else __PYX_ERR(0, 61, __pyx_L1_error)
         }
         break;
       }
@@ -2008,51 +2445,51 @@ static PyObject *__pyx_pf_10transition_2infect(CYTHON_UNUSED PyObject *__pyx_sel
     }
     __Pyx_XDECREF_SET(__pyx_v_agent, __pyx_t_5);
     __pyx_t_5 = 0;
-    __pyx_t_5 = __Pyx_PyObject_GetAttrStr(__pyx_v_agent, __pyx_n_s_status); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 39, __pyx_L1_error)
+    __pyx_t_5 = __Pyx_PyObject_GetAttrStr(__pyx_v_agent, __pyx_n_s_status); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 61, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_5);
-    __pyx_t_6 = (__Pyx_PyString_Equals(__pyx_t_5, __pyx_n_s_I, Py_EQ)); if (unlikely(__pyx_t_6 < 0)) __PYX_ERR(0, 39, __pyx_L1_error)
+    __pyx_t_6 = (__Pyx_PyString_Equals(__pyx_t_5, __pyx_n_s_I, Py_EQ)); if (unlikely(__pyx_t_6 < 0)) __PYX_ERR(0, 61, __pyx_L1_error)
     __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
     if (__pyx_t_6) {
-      if (unlikely(__Pyx_ListComp_Append(__pyx_t_1, (PyObject*)__pyx_v_agent))) __PYX_ERR(0, 39, __pyx_L1_error)
+      if (unlikely(__Pyx_ListComp_Append(__pyx_t_1, (PyObject*)__pyx_v_agent))) __PYX_ERR(0, 61, __pyx_L1_error)
     }
   }
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
   __pyx_v_infected_agents = ((PyObject*)__pyx_t_1);
   __pyx_t_1 = 0;
 
-  /* "transition.pyx":40
+  /* "transition.pyx":62
  *     """
  *     infected_agents = [agent for agent in agent_list if agent.status == "I"]
  *     susceptible_agents = [agent for agent in agent_list if agent.status == "S"]             # <<<<<<<<<<<<<<
  *     for infected_agent in infected_agents:
  *         infected_location = infected_agent.location
  */
-  __pyx_t_1 = PyList_New(0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 40, __pyx_L1_error)
+  __pyx_t_1 = PyList_New(0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 62, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   if (likely(PyList_CheckExact(__pyx_v_agent_list)) || PyTuple_CheckExact(__pyx_v_agent_list)) {
     __pyx_t_2 = __pyx_v_agent_list; __Pyx_INCREF(__pyx_t_2); __pyx_t_3 = 0;
     __pyx_t_4 = NULL;
   } else {
-    __pyx_t_3 = -1; __pyx_t_2 = PyObject_GetIter(__pyx_v_agent_list); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 40, __pyx_L1_error)
+    __pyx_t_3 = -1; __pyx_t_2 = PyObject_GetIter(__pyx_v_agent_list); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 62, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_2);
-    __pyx_t_4 = Py_TYPE(__pyx_t_2)->tp_iternext; if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 40, __pyx_L1_error)
+    __pyx_t_4 = Py_TYPE(__pyx_t_2)->tp_iternext; if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 62, __pyx_L1_error)
   }
   for (;;) {
     if (likely(!__pyx_t_4)) {
       if (likely(PyList_CheckExact(__pyx_t_2))) {
         if (__pyx_t_3 >= PyList_GET_SIZE(__pyx_t_2)) break;
         #if CYTHON_ASSUME_SAFE_MACROS && !CYTHON_AVOID_BORROWED_REFS
-        __pyx_t_5 = PyList_GET_ITEM(__pyx_t_2, __pyx_t_3); __Pyx_INCREF(__pyx_t_5); __pyx_t_3++; if (unlikely(0 < 0)) __PYX_ERR(0, 40, __pyx_L1_error)
+        __pyx_t_5 = PyList_GET_ITEM(__pyx_t_2, __pyx_t_3); __Pyx_INCREF(__pyx_t_5); __pyx_t_3++; if (unlikely(0 < 0)) __PYX_ERR(0, 62, __pyx_L1_error)
         #else
-        __pyx_t_5 = PySequence_ITEM(__pyx_t_2, __pyx_t_3); __pyx_t_3++; if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 40, __pyx_L1_error)
+        __pyx_t_5 = PySequence_ITEM(__pyx_t_2, __pyx_t_3); __pyx_t_3++; if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 62, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_5);
         #endif
       } else {
         if (__pyx_t_3 >= PyTuple_GET_SIZE(__pyx_t_2)) break;
         #if CYTHON_ASSUME_SAFE_MACROS && !CYTHON_AVOID_BORROWED_REFS
-        __pyx_t_5 = PyTuple_GET_ITEM(__pyx_t_2, __pyx_t_3); __Pyx_INCREF(__pyx_t_5); __pyx_t_3++; if (unlikely(0 < 0)) __PYX_ERR(0, 40, __pyx_L1_error)
+        __pyx_t_5 = PyTuple_GET_ITEM(__pyx_t_2, __pyx_t_3); __Pyx_INCREF(__pyx_t_5); __pyx_t_3++; if (unlikely(0 < 0)) __PYX_ERR(0, 62, __pyx_L1_error)
         #else
-        __pyx_t_5 = PySequence_ITEM(__pyx_t_2, __pyx_t_3); __pyx_t_3++; if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 40, __pyx_L1_error)
+        __pyx_t_5 = PySequence_ITEM(__pyx_t_2, __pyx_t_3); __pyx_t_3++; if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 62, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_5);
         #endif
       }
@@ -2062,7 +2499,7 @@ static PyObject *__pyx_pf_10transition_2infect(CYTHON_UNUSED PyObject *__pyx_sel
         PyObject* exc_type = PyErr_Occurred();
         if (exc_type) {
           if (likely(__Pyx_PyErr_GivenExceptionMatches(exc_type, PyExc_StopIteration))) PyErr_Clear();
-          else __PYX_ERR(0, 40, __pyx_L1_error)
+          else __PYX_ERR(0, 62, __pyx_L1_error)
         }
         break;
       }
@@ -2070,19 +2507,19 @@ static PyObject *__pyx_pf_10transition_2infect(CYTHON_UNUSED PyObject *__pyx_sel
     }
     __Pyx_XDECREF_SET(__pyx_v_agent, __pyx_t_5);
     __pyx_t_5 = 0;
-    __pyx_t_5 = __Pyx_PyObject_GetAttrStr(__pyx_v_agent, __pyx_n_s_status); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 40, __pyx_L1_error)
+    __pyx_t_5 = __Pyx_PyObject_GetAttrStr(__pyx_v_agent, __pyx_n_s_status); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 62, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_5);
-    __pyx_t_6 = (__Pyx_PyString_Equals(__pyx_t_5, __pyx_n_s_S, Py_EQ)); if (unlikely(__pyx_t_6 < 0)) __PYX_ERR(0, 40, __pyx_L1_error)
+    __pyx_t_6 = (__Pyx_PyString_Equals(__pyx_t_5, __pyx_n_s_S, Py_EQ)); if (unlikely(__pyx_t_6 < 0)) __PYX_ERR(0, 62, __pyx_L1_error)
     __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
     if (__pyx_t_6) {
-      if (unlikely(__Pyx_ListComp_Append(__pyx_t_1, (PyObject*)__pyx_v_agent))) __PYX_ERR(0, 40, __pyx_L1_error)
+      if (unlikely(__Pyx_ListComp_Append(__pyx_t_1, (PyObject*)__pyx_v_agent))) __PYX_ERR(0, 62, __pyx_L1_error)
     }
   }
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
   __pyx_v_susceptible_agents = ((PyObject*)__pyx_t_1);
   __pyx_t_1 = 0;
 
-  /* "transition.pyx":41
+  /* "transition.pyx":63
  *     infected_agents = [agent for agent in agent_list if agent.status == "I"]
  *     susceptible_agents = [agent for agent in agent_list if agent.status == "S"]
  *     for infected_agent in infected_agents:             # <<<<<<<<<<<<<<
@@ -2093,27 +2530,27 @@ static PyObject *__pyx_pf_10transition_2infect(CYTHON_UNUSED PyObject *__pyx_sel
   for (;;) {
     if (__pyx_t_3 >= PyList_GET_SIZE(__pyx_t_1)) break;
     #if CYTHON_ASSUME_SAFE_MACROS && !CYTHON_AVOID_BORROWED_REFS
-    __pyx_t_2 = PyList_GET_ITEM(__pyx_t_1, __pyx_t_3); __Pyx_INCREF(__pyx_t_2); __pyx_t_3++; if (unlikely(0 < 0)) __PYX_ERR(0, 41, __pyx_L1_error)
+    __pyx_t_2 = PyList_GET_ITEM(__pyx_t_1, __pyx_t_3); __Pyx_INCREF(__pyx_t_2); __pyx_t_3++; if (unlikely(0 < 0)) __PYX_ERR(0, 63, __pyx_L1_error)
     #else
-    __pyx_t_2 = PySequence_ITEM(__pyx_t_1, __pyx_t_3); __pyx_t_3++; if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 41, __pyx_L1_error)
+    __pyx_t_2 = PySequence_ITEM(__pyx_t_1, __pyx_t_3); __pyx_t_3++; if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 63, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_2);
     #endif
     __Pyx_XDECREF_SET(__pyx_v_infected_agent, __pyx_t_2);
     __pyx_t_2 = 0;
 
-    /* "transition.pyx":42
+    /* "transition.pyx":64
  *     susceptible_agents = [agent for agent in agent_list if agent.status == "S"]
  *     for infected_agent in infected_agents:
  *         infected_location = infected_agent.location             # <<<<<<<<<<<<<<
  *         for susceptible_agent in susceptible_agents:
  *             susceptible_location = susceptible_agent.location
  */
-    __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_v_infected_agent, __pyx_n_s_location); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 42, __pyx_L1_error)
+    __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_v_infected_agent, __pyx_n_s_location); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 64, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_2);
     __Pyx_XDECREF_SET(__pyx_v_infected_location, __pyx_t_2);
     __pyx_t_2 = 0;
 
-    /* "transition.pyx":43
+    /* "transition.pyx":65
  *     for infected_agent in infected_agents:
  *         infected_location = infected_agent.location
  *         for susceptible_agent in susceptible_agents:             # <<<<<<<<<<<<<<
@@ -2124,61 +2561,61 @@ static PyObject *__pyx_pf_10transition_2infect(CYTHON_UNUSED PyObject *__pyx_sel
     for (;;) {
       if (__pyx_t_7 >= PyList_GET_SIZE(__pyx_t_2)) break;
       #if CYTHON_ASSUME_SAFE_MACROS && !CYTHON_AVOID_BORROWED_REFS
-      __pyx_t_5 = PyList_GET_ITEM(__pyx_t_2, __pyx_t_7); __Pyx_INCREF(__pyx_t_5); __pyx_t_7++; if (unlikely(0 < 0)) __PYX_ERR(0, 43, __pyx_L1_error)
+      __pyx_t_5 = PyList_GET_ITEM(__pyx_t_2, __pyx_t_7); __Pyx_INCREF(__pyx_t_5); __pyx_t_7++; if (unlikely(0 < 0)) __PYX_ERR(0, 65, __pyx_L1_error)
       #else
-      __pyx_t_5 = PySequence_ITEM(__pyx_t_2, __pyx_t_7); __pyx_t_7++; if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 43, __pyx_L1_error)
+      __pyx_t_5 = PySequence_ITEM(__pyx_t_2, __pyx_t_7); __pyx_t_7++; if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 65, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_5);
       #endif
       __Pyx_XDECREF_SET(__pyx_v_susceptible_agent, __pyx_t_5);
       __pyx_t_5 = 0;
 
-      /* "transition.pyx":44
+      /* "transition.pyx":66
  *         infected_location = infected_agent.location
  *         for susceptible_agent in susceptible_agents:
  *             susceptible_location = susceptible_agent.location             # <<<<<<<<<<<<<<
  *             distance = math.sqrt((infected_location[0] - susceptible_location[0]) ** 2 + (infected_location[1] - susceptible_location[1]) ** 2)
  *             if distance <= infection_distance:
  */
-      __pyx_t_5 = __Pyx_PyObject_GetAttrStr(__pyx_v_susceptible_agent, __pyx_n_s_location); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 44, __pyx_L1_error)
+      __pyx_t_5 = __Pyx_PyObject_GetAttrStr(__pyx_v_susceptible_agent, __pyx_n_s_location); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 66, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_5);
       __Pyx_XDECREF_SET(__pyx_v_susceptible_location, __pyx_t_5);
       __pyx_t_5 = 0;
 
-      /* "transition.pyx":45
+      /* "transition.pyx":67
  *         for susceptible_agent in susceptible_agents:
  *             susceptible_location = susceptible_agent.location
  *             distance = math.sqrt((infected_location[0] - susceptible_location[0]) ** 2 + (infected_location[1] - susceptible_location[1]) ** 2)             # <<<<<<<<<<<<<<
  *             if distance <= infection_distance:
- *                 adjusted_infection_probability = infection_probability * (1 - susceptible_agent.vaccine_efficacy)
+ *                 adjusted_infection_probability = (infection_probability + susceptible_agent.immunodeficient*infection_probability_increase) * (1 - susceptible_agent.vaccine_efficacy)
  */
-      __Pyx_GetModuleGlobalName(__pyx_t_8, __pyx_n_s_math); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 45, __pyx_L1_error)
+      __Pyx_GetModuleGlobalName(__pyx_t_8, __pyx_n_s_math); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 67, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_8);
-      __pyx_t_9 = __Pyx_PyObject_GetAttrStr(__pyx_t_8, __pyx_n_s_sqrt); if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 45, __pyx_L1_error)
+      __pyx_t_9 = __Pyx_PyObject_GetAttrStr(__pyx_t_8, __pyx_n_s_sqrt); if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 67, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_9);
       __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
-      __pyx_t_8 = __Pyx_GetItemInt(__pyx_v_infected_location, 0, long, 1, __Pyx_PyInt_From_long, 0, 0, 1); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 45, __pyx_L1_error)
+      __pyx_t_8 = __Pyx_GetItemInt(__pyx_v_infected_location, 0, long, 1, __Pyx_PyInt_From_long, 0, 0, 1); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 67, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_8);
-      __pyx_t_10 = __Pyx_GetItemInt(__pyx_v_susceptible_location, 0, long, 1, __Pyx_PyInt_From_long, 0, 0, 1); if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 45, __pyx_L1_error)
+      __pyx_t_10 = __Pyx_GetItemInt(__pyx_v_susceptible_location, 0, long, 1, __Pyx_PyInt_From_long, 0, 0, 1); if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 67, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_10);
-      __pyx_t_11 = PyNumber_Subtract(__pyx_t_8, __pyx_t_10); if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 45, __pyx_L1_error)
+      __pyx_t_11 = PyNumber_Subtract(__pyx_t_8, __pyx_t_10); if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 67, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_11);
       __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
       __Pyx_DECREF(__pyx_t_10); __pyx_t_10 = 0;
-      __pyx_t_10 = PyNumber_Power(__pyx_t_11, __pyx_int_2, Py_None); if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 45, __pyx_L1_error)
+      __pyx_t_10 = PyNumber_Power(__pyx_t_11, __pyx_int_2, Py_None); if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 67, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_10);
       __Pyx_DECREF(__pyx_t_11); __pyx_t_11 = 0;
-      __pyx_t_11 = __Pyx_GetItemInt(__pyx_v_infected_location, 1, long, 1, __Pyx_PyInt_From_long, 0, 0, 1); if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 45, __pyx_L1_error)
+      __pyx_t_11 = __Pyx_GetItemInt(__pyx_v_infected_location, 1, long, 1, __Pyx_PyInt_From_long, 0, 0, 1); if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 67, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_11);
-      __pyx_t_8 = __Pyx_GetItemInt(__pyx_v_susceptible_location, 1, long, 1, __Pyx_PyInt_From_long, 0, 0, 1); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 45, __pyx_L1_error)
+      __pyx_t_8 = __Pyx_GetItemInt(__pyx_v_susceptible_location, 1, long, 1, __Pyx_PyInt_From_long, 0, 0, 1); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 67, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_8);
-      __pyx_t_12 = PyNumber_Subtract(__pyx_t_11, __pyx_t_8); if (unlikely(!__pyx_t_12)) __PYX_ERR(0, 45, __pyx_L1_error)
+      __pyx_t_12 = PyNumber_Subtract(__pyx_t_11, __pyx_t_8); if (unlikely(!__pyx_t_12)) __PYX_ERR(0, 67, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_12);
       __Pyx_DECREF(__pyx_t_11); __pyx_t_11 = 0;
       __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
-      __pyx_t_8 = PyNumber_Power(__pyx_t_12, __pyx_int_2, Py_None); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 45, __pyx_L1_error)
+      __pyx_t_8 = PyNumber_Power(__pyx_t_12, __pyx_int_2, Py_None); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 67, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_8);
       __Pyx_DECREF(__pyx_t_12); __pyx_t_12 = 0;
-      __pyx_t_12 = PyNumber_Add(__pyx_t_10, __pyx_t_8); if (unlikely(!__pyx_t_12)) __PYX_ERR(0, 45, __pyx_L1_error)
+      __pyx_t_12 = PyNumber_Add(__pyx_t_10, __pyx_t_8); if (unlikely(!__pyx_t_12)) __PYX_ERR(0, 67, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_12);
       __Pyx_DECREF(__pyx_t_10); __pyx_t_10 = 0;
       __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
@@ -2195,135 +2632,147 @@ static PyObject *__pyx_pf_10transition_2infect(CYTHON_UNUSED PyObject *__pyx_sel
       __pyx_t_5 = (__pyx_t_8) ? __Pyx_PyObject_Call2Args(__pyx_t_9, __pyx_t_8, __pyx_t_12) : __Pyx_PyObject_CallOneArg(__pyx_t_9, __pyx_t_12);
       __Pyx_XDECREF(__pyx_t_8); __pyx_t_8 = 0;
       __Pyx_DECREF(__pyx_t_12); __pyx_t_12 = 0;
-      if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 45, __pyx_L1_error)
+      if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 67, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_5);
       __Pyx_DECREF(__pyx_t_9); __pyx_t_9 = 0;
       __Pyx_XDECREF_SET(__pyx_v_distance, __pyx_t_5);
       __pyx_t_5 = 0;
 
-      /* "transition.pyx":46
+      /* "transition.pyx":68
  *             susceptible_location = susceptible_agent.location
  *             distance = math.sqrt((infected_location[0] - susceptible_location[0]) ** 2 + (infected_location[1] - susceptible_location[1]) ** 2)
  *             if distance <= infection_distance:             # <<<<<<<<<<<<<<
- *                 adjusted_infection_probability = infection_probability * (1 - susceptible_agent.vaccine_efficacy)
+ *                 adjusted_infection_probability = (infection_probability + susceptible_agent.immunodeficient*infection_probability_increase) * (1 - susceptible_agent.vaccine_efficacy)
  *                 if random.random() < adjusted_infection_probability:
  */
-      __pyx_t_5 = PyFloat_FromDouble(__pyx_v_infection_distance); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 46, __pyx_L1_error)
+      __pyx_t_5 = PyFloat_FromDouble(__pyx_v_infection_distance); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 68, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_5);
-      __pyx_t_9 = PyObject_RichCompare(__pyx_v_distance, __pyx_t_5, Py_LE); __Pyx_XGOTREF(__pyx_t_9); if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 46, __pyx_L1_error)
+      __pyx_t_9 = PyObject_RichCompare(__pyx_v_distance, __pyx_t_5, Py_LE); __Pyx_XGOTREF(__pyx_t_9); if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 68, __pyx_L1_error)
       __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
-      __pyx_t_6 = __Pyx_PyObject_IsTrue(__pyx_t_9); if (unlikely(__pyx_t_6 < 0)) __PYX_ERR(0, 46, __pyx_L1_error)
+      __pyx_t_6 = __Pyx_PyObject_IsTrue(__pyx_t_9); if (unlikely(__pyx_t_6 < 0)) __PYX_ERR(0, 68, __pyx_L1_error)
       __Pyx_DECREF(__pyx_t_9); __pyx_t_9 = 0;
       if (__pyx_t_6) {
 
-        /* "transition.pyx":47
+        /* "transition.pyx":69
  *             distance = math.sqrt((infected_location[0] - susceptible_location[0]) ** 2 + (infected_location[1] - susceptible_location[1]) ** 2)
  *             if distance <= infection_distance:
- *                 adjusted_infection_probability = infection_probability * (1 - susceptible_agent.vaccine_efficacy)             # <<<<<<<<<<<<<<
+ *                 adjusted_infection_probability = (infection_probability + susceptible_agent.immunodeficient*infection_probability_increase) * (1 - susceptible_agent.vaccine_efficacy)             # <<<<<<<<<<<<<<
  *                 if random.random() < adjusted_infection_probability:
  *                     susceptible_agent.status = 'I'
  */
-        __pyx_t_9 = PyFloat_FromDouble(__pyx_v_infection_probability); if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 47, __pyx_L1_error)
+        __pyx_t_9 = PyFloat_FromDouble(__pyx_v_infection_probability); if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 69, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_9);
-        __pyx_t_5 = __Pyx_PyObject_GetAttrStr(__pyx_v_susceptible_agent, __pyx_n_s_vaccine_efficacy); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 47, __pyx_L1_error)
+        __pyx_t_5 = __Pyx_PyObject_GetAttrStr(__pyx_v_susceptible_agent, __pyx_n_s_immunodeficient); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 69, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_5);
-        __pyx_t_12 = __Pyx_PyInt_SubtractCObj(__pyx_int_1, __pyx_t_5, 1, 0, 0); if (unlikely(!__pyx_t_12)) __PYX_ERR(0, 47, __pyx_L1_error)
+        __pyx_t_12 = PyFloat_FromDouble(__pyx_v_infection_probability_increase); if (unlikely(!__pyx_t_12)) __PYX_ERR(0, 69, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_12);
+        __pyx_t_8 = PyNumber_Multiply(__pyx_t_5, __pyx_t_12); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 69, __pyx_L1_error)
+        __Pyx_GOTREF(__pyx_t_8);
         __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
-        __pyx_t_5 = PyNumber_Multiply(__pyx_t_9, __pyx_t_12); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 47, __pyx_L1_error)
-        __Pyx_GOTREF(__pyx_t_5);
-        __Pyx_DECREF(__pyx_t_9); __pyx_t_9 = 0;
         __Pyx_DECREF(__pyx_t_12); __pyx_t_12 = 0;
-        __Pyx_XDECREF_SET(__pyx_v_adjusted_infection_probability, __pyx_t_5);
-        __pyx_t_5 = 0;
+        __pyx_t_12 = PyNumber_Add(__pyx_t_9, __pyx_t_8); if (unlikely(!__pyx_t_12)) __PYX_ERR(0, 69, __pyx_L1_error)
+        __Pyx_GOTREF(__pyx_t_12);
+        __Pyx_DECREF(__pyx_t_9); __pyx_t_9 = 0;
+        __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
+        __pyx_t_8 = __Pyx_PyObject_GetAttrStr(__pyx_v_susceptible_agent, __pyx_n_s_vaccine_efficacy); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 69, __pyx_L1_error)
+        __Pyx_GOTREF(__pyx_t_8);
+        __pyx_t_9 = __Pyx_PyInt_SubtractCObj(__pyx_int_1, __pyx_t_8, 1, 0, 0); if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 69, __pyx_L1_error)
+        __Pyx_GOTREF(__pyx_t_9);
+        __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
+        __pyx_t_8 = PyNumber_Multiply(__pyx_t_12, __pyx_t_9); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 69, __pyx_L1_error)
+        __Pyx_GOTREF(__pyx_t_8);
+        __Pyx_DECREF(__pyx_t_12); __pyx_t_12 = 0;
+        __Pyx_DECREF(__pyx_t_9); __pyx_t_9 = 0;
+        __Pyx_XDECREF_SET(__pyx_v_adjusted_infection_probability, __pyx_t_8);
+        __pyx_t_8 = 0;
 
-        /* "transition.pyx":48
+        /* "transition.pyx":70
  *             if distance <= infection_distance:
- *                 adjusted_infection_probability = infection_probability * (1 - susceptible_agent.vaccine_efficacy)
+ *                 adjusted_infection_probability = (infection_probability + susceptible_agent.immunodeficient*infection_probability_increase) * (1 - susceptible_agent.vaccine_efficacy)
  *                 if random.random() < adjusted_infection_probability:             # <<<<<<<<<<<<<<
  *                     susceptible_agent.status = 'I'
  *                     susceptible_agent.reset_days_with_status()
  */
-        __Pyx_GetModuleGlobalName(__pyx_t_12, __pyx_n_s_random); if (unlikely(!__pyx_t_12)) __PYX_ERR(0, 48, __pyx_L1_error)
-        __Pyx_GOTREF(__pyx_t_12);
-        __pyx_t_9 = __Pyx_PyObject_GetAttrStr(__pyx_t_12, __pyx_n_s_random); if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 48, __pyx_L1_error)
+        __Pyx_GetModuleGlobalName(__pyx_t_9, __pyx_n_s_random); if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 70, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_9);
-        __Pyx_DECREF(__pyx_t_12); __pyx_t_12 = 0;
-        __pyx_t_12 = NULL;
-        if (CYTHON_UNPACK_METHODS && unlikely(PyMethod_Check(__pyx_t_9))) {
-          __pyx_t_12 = PyMethod_GET_SELF(__pyx_t_9);
-          if (likely(__pyx_t_12)) {
-            PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_9);
-            __Pyx_INCREF(__pyx_t_12);
+        __pyx_t_12 = __Pyx_PyObject_GetAttrStr(__pyx_t_9, __pyx_n_s_random); if (unlikely(!__pyx_t_12)) __PYX_ERR(0, 70, __pyx_L1_error)
+        __Pyx_GOTREF(__pyx_t_12);
+        __Pyx_DECREF(__pyx_t_9); __pyx_t_9 = 0;
+        __pyx_t_9 = NULL;
+        if (CYTHON_UNPACK_METHODS && unlikely(PyMethod_Check(__pyx_t_12))) {
+          __pyx_t_9 = PyMethod_GET_SELF(__pyx_t_12);
+          if (likely(__pyx_t_9)) {
+            PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_12);
+            __Pyx_INCREF(__pyx_t_9);
             __Pyx_INCREF(function);
-            __Pyx_DECREF_SET(__pyx_t_9, function);
+            __Pyx_DECREF_SET(__pyx_t_12, function);
           }
         }
-        __pyx_t_5 = (__pyx_t_12) ? __Pyx_PyObject_CallOneArg(__pyx_t_9, __pyx_t_12) : __Pyx_PyObject_CallNoArg(__pyx_t_9);
-        __Pyx_XDECREF(__pyx_t_12); __pyx_t_12 = 0;
-        if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 48, __pyx_L1_error)
-        __Pyx_GOTREF(__pyx_t_5);
-        __Pyx_DECREF(__pyx_t_9); __pyx_t_9 = 0;
-        __pyx_t_9 = PyObject_RichCompare(__pyx_t_5, __pyx_v_adjusted_infection_probability, Py_LT); __Pyx_XGOTREF(__pyx_t_9); if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 48, __pyx_L1_error)
-        __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
-        __pyx_t_6 = __Pyx_PyObject_IsTrue(__pyx_t_9); if (unlikely(__pyx_t_6 < 0)) __PYX_ERR(0, 48, __pyx_L1_error)
-        __Pyx_DECREF(__pyx_t_9); __pyx_t_9 = 0;
+        __pyx_t_8 = (__pyx_t_9) ? __Pyx_PyObject_CallOneArg(__pyx_t_12, __pyx_t_9) : __Pyx_PyObject_CallNoArg(__pyx_t_12);
+        __Pyx_XDECREF(__pyx_t_9); __pyx_t_9 = 0;
+        if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 70, __pyx_L1_error)
+        __Pyx_GOTREF(__pyx_t_8);
+        __Pyx_DECREF(__pyx_t_12); __pyx_t_12 = 0;
+        __pyx_t_12 = PyObject_RichCompare(__pyx_t_8, __pyx_v_adjusted_infection_probability, Py_LT); __Pyx_XGOTREF(__pyx_t_12); if (unlikely(!__pyx_t_12)) __PYX_ERR(0, 70, __pyx_L1_error)
+        __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
+        __pyx_t_6 = __Pyx_PyObject_IsTrue(__pyx_t_12); if (unlikely(__pyx_t_6 < 0)) __PYX_ERR(0, 70, __pyx_L1_error)
+        __Pyx_DECREF(__pyx_t_12); __pyx_t_12 = 0;
         if (__pyx_t_6) {
 
-          /* "transition.pyx":49
- *                 adjusted_infection_probability = infection_probability * (1 - susceptible_agent.vaccine_efficacy)
+          /* "transition.pyx":71
+ *                 adjusted_infection_probability = (infection_probability + susceptible_agent.immunodeficient*infection_probability_increase) * (1 - susceptible_agent.vaccine_efficacy)
  *                 if random.random() < adjusted_infection_probability:
  *                     susceptible_agent.status = 'I'             # <<<<<<<<<<<<<<
  *                     susceptible_agent.reset_days_with_status()
  * 
  */
-          if (__Pyx_PyObject_SetAttrStr(__pyx_v_susceptible_agent, __pyx_n_s_status, __pyx_n_s_I) < 0) __PYX_ERR(0, 49, __pyx_L1_error)
+          if (__Pyx_PyObject_SetAttrStr(__pyx_v_susceptible_agent, __pyx_n_s_status, __pyx_n_s_I) < 0) __PYX_ERR(0, 71, __pyx_L1_error)
 
-          /* "transition.pyx":50
+          /* "transition.pyx":72
  *                 if random.random() < adjusted_infection_probability:
  *                     susceptible_agent.status = 'I'
  *                     susceptible_agent.reset_days_with_status()             # <<<<<<<<<<<<<<
  * 
  * def recover(agents, int minimum_infection_duration, float recovery_probability, int vaccinated_recovery_reduction=0):
  */
-          __pyx_t_5 = __Pyx_PyObject_GetAttrStr(__pyx_v_susceptible_agent, __pyx_n_s_reset_days_with_status); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 50, __pyx_L1_error)
-          __Pyx_GOTREF(__pyx_t_5);
-          __pyx_t_12 = NULL;
-          if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_5))) {
-            __pyx_t_12 = PyMethod_GET_SELF(__pyx_t_5);
-            if (likely(__pyx_t_12)) {
-              PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_5);
-              __Pyx_INCREF(__pyx_t_12);
+          __pyx_t_8 = __Pyx_PyObject_GetAttrStr(__pyx_v_susceptible_agent, __pyx_n_s_reset_days_with_status); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 72, __pyx_L1_error)
+          __Pyx_GOTREF(__pyx_t_8);
+          __pyx_t_9 = NULL;
+          if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_8))) {
+            __pyx_t_9 = PyMethod_GET_SELF(__pyx_t_8);
+            if (likely(__pyx_t_9)) {
+              PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_8);
+              __Pyx_INCREF(__pyx_t_9);
               __Pyx_INCREF(function);
-              __Pyx_DECREF_SET(__pyx_t_5, function);
+              __Pyx_DECREF_SET(__pyx_t_8, function);
             }
           }
-          __pyx_t_9 = (__pyx_t_12) ? __Pyx_PyObject_CallOneArg(__pyx_t_5, __pyx_t_12) : __Pyx_PyObject_CallNoArg(__pyx_t_5);
-          __Pyx_XDECREF(__pyx_t_12); __pyx_t_12 = 0;
-          if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 50, __pyx_L1_error)
-          __Pyx_GOTREF(__pyx_t_9);
-          __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
-          __Pyx_DECREF(__pyx_t_9); __pyx_t_9 = 0;
+          __pyx_t_12 = (__pyx_t_9) ? __Pyx_PyObject_CallOneArg(__pyx_t_8, __pyx_t_9) : __Pyx_PyObject_CallNoArg(__pyx_t_8);
+          __Pyx_XDECREF(__pyx_t_9); __pyx_t_9 = 0;
+          if (unlikely(!__pyx_t_12)) __PYX_ERR(0, 72, __pyx_L1_error)
+          __Pyx_GOTREF(__pyx_t_12);
+          __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
+          __Pyx_DECREF(__pyx_t_12); __pyx_t_12 = 0;
 
-          /* "transition.pyx":48
+          /* "transition.pyx":70
  *             if distance <= infection_distance:
- *                 adjusted_infection_probability = infection_probability * (1 - susceptible_agent.vaccine_efficacy)
+ *                 adjusted_infection_probability = (infection_probability + susceptible_agent.immunodeficient*infection_probability_increase) * (1 - susceptible_agent.vaccine_efficacy)
  *                 if random.random() < adjusted_infection_probability:             # <<<<<<<<<<<<<<
  *                     susceptible_agent.status = 'I'
  *                     susceptible_agent.reset_days_with_status()
  */
         }
 
-        /* "transition.pyx":46
+        /* "transition.pyx":68
  *             susceptible_location = susceptible_agent.location
  *             distance = math.sqrt((infected_location[0] - susceptible_location[0]) ** 2 + (infected_location[1] - susceptible_location[1]) ** 2)
  *             if distance <= infection_distance:             # <<<<<<<<<<<<<<
- *                 adjusted_infection_probability = infection_probability * (1 - susceptible_agent.vaccine_efficacy)
+ *                 adjusted_infection_probability = (infection_probability + susceptible_agent.immunodeficient*infection_probability_increase) * (1 - susceptible_agent.vaccine_efficacy)
  *                 if random.random() < adjusted_infection_probability:
  */
       }
 
-      /* "transition.pyx":43
+      /* "transition.pyx":65
  *     for infected_agent in infected_agents:
  *         infected_location = infected_agent.location
  *         for susceptible_agent in susceptible_agents:             # <<<<<<<<<<<<<<
@@ -2333,7 +2782,7 @@ static PyObject *__pyx_pf_10transition_2infect(CYTHON_UNUSED PyObject *__pyx_sel
     }
     __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
 
-    /* "transition.pyx":41
+    /* "transition.pyx":63
  *     infected_agents = [agent for agent in agent_list if agent.status == "I"]
  *     susceptible_agents = [agent for agent in agent_list if agent.status == "S"]
  *     for infected_agent in infected_agents:             # <<<<<<<<<<<<<<
@@ -2343,10 +2792,10 @@ static PyObject *__pyx_pf_10transition_2infect(CYTHON_UNUSED PyObject *__pyx_sel
   }
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-  /* "transition.pyx":27
+  /* "transition.pyx":49
  *             agent.vaccine_efficacy = vaccine_efficacy
  * 
- * def infect(agent_list, float infection_distance, float infection_probability):             # <<<<<<<<<<<<<<
+ * def infect(agent_list, float infection_distance, float infection_probability, float infection_probability_increase = 0.4):             # <<<<<<<<<<<<<<
  *     """
  *     Infects any susceptible agents within a given distance of an infected agent, with a given infection probability.
  */
@@ -2380,7 +2829,7 @@ static PyObject *__pyx_pf_10transition_2infect(CYTHON_UNUSED PyObject *__pyx_sel
   return __pyx_r;
 }
 
-/* "transition.pyx":52
+/* "transition.pyx":74
  *                     susceptible_agent.reset_days_with_status()
  * 
  * def recover(agents, int minimum_infection_duration, float recovery_probability, int vaccinated_recovery_reduction=0):             # <<<<<<<<<<<<<<
@@ -2389,10 +2838,10 @@ static PyObject *__pyx_pf_10transition_2infect(CYTHON_UNUSED PyObject *__pyx_sel
  */
 
 /* Python wrapper */
-static PyObject *__pyx_pw_10transition_5recover(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
-static char __pyx_doc_10transition_4recover[] = "\n    Recovers agents they have been infected for at least minimum_infection_duration days, with a given recovery probability.\n\n    Args:\n    - agents: A list of agents.\n    - minimum_infection_duration: An int representing the minimum number of days an infected agent takes to recover.\n    - recovery_probability: A float representing the probability of an infected agent recovering.\n    - vaccinated_recovery_reduction: An int representing the reduction in recovery time for vaccinated agents.\n\n    Returns:\n    - None\n    ";
-static PyMethodDef __pyx_mdef_10transition_5recover = {"recover", (PyCFunction)(void*)(PyCFunctionWithKeywords)__pyx_pw_10transition_5recover, METH_VARARGS|METH_KEYWORDS, __pyx_doc_10transition_4recover};
-static PyObject *__pyx_pw_10transition_5recover(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
+static PyObject *__pyx_pw_10transition_7recover(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
+static char __pyx_doc_10transition_6recover[] = "\n    Recovers agents they have been infected for at least minimum_infection_duration days, with a given recovery probability.\n\n    Args:\n    - agents: A list of agents.\n    - minimum_infection_duration: An int representing the minimum number of days an infected agent takes to recover.\n    - recovery_probability: A float representing the probability of an infected agent recovering.\n    - vaccinated_recovery_reduction: An int representing the reduction in recovery time for vaccinated agents.\n\n    Returns:\n    - None\n    ";
+static PyMethodDef __pyx_mdef_10transition_7recover = {"recover", (PyCFunction)(void*)(PyCFunctionWithKeywords)__pyx_pw_10transition_7recover, METH_VARARGS|METH_KEYWORDS, __pyx_doc_10transition_6recover};
+static PyObject *__pyx_pw_10transition_7recover(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
   PyObject *__pyx_v_agents = 0;
   int __pyx_v_minimum_infection_duration;
   float __pyx_v_recovery_probability;
@@ -2430,13 +2879,13 @@ static PyObject *__pyx_pw_10transition_5recover(PyObject *__pyx_self, PyObject *
         case  1:
         if (likely((values[1] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_minimum_infection_duration)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("recover", 0, 3, 4, 1); __PYX_ERR(0, 52, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("recover", 0, 3, 4, 1); __PYX_ERR(0, 74, __pyx_L3_error)
         }
         CYTHON_FALLTHROUGH;
         case  2:
         if (likely((values[2] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_recovery_probability)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("recover", 0, 3, 4, 2); __PYX_ERR(0, 52, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("recover", 0, 3, 4, 2); __PYX_ERR(0, 74, __pyx_L3_error)
         }
         CYTHON_FALLTHROUGH;
         case  3:
@@ -2446,7 +2895,7 @@ static PyObject *__pyx_pw_10transition_5recover(PyObject *__pyx_self, PyObject *
         }
       }
       if (unlikely(kw_args > 0)) {
-        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "recover") < 0)) __PYX_ERR(0, 52, __pyx_L3_error)
+        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "recover") < 0)) __PYX_ERR(0, 74, __pyx_L3_error)
       }
     } else {
       switch (PyTuple_GET_SIZE(__pyx_args)) {
@@ -2460,30 +2909,30 @@ static PyObject *__pyx_pw_10transition_5recover(PyObject *__pyx_self, PyObject *
       }
     }
     __pyx_v_agents = values[0];
-    __pyx_v_minimum_infection_duration = __Pyx_PyInt_As_int(values[1]); if (unlikely((__pyx_v_minimum_infection_duration == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 52, __pyx_L3_error)
-    __pyx_v_recovery_probability = __pyx_PyFloat_AsFloat(values[2]); if (unlikely((__pyx_v_recovery_probability == (float)-1) && PyErr_Occurred())) __PYX_ERR(0, 52, __pyx_L3_error)
+    __pyx_v_minimum_infection_duration = __Pyx_PyInt_As_int(values[1]); if (unlikely((__pyx_v_minimum_infection_duration == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 74, __pyx_L3_error)
+    __pyx_v_recovery_probability = __pyx_PyFloat_AsFloat(values[2]); if (unlikely((__pyx_v_recovery_probability == (float)-1) && PyErr_Occurred())) __PYX_ERR(0, 74, __pyx_L3_error)
     if (values[3]) {
-      __pyx_v_vaccinated_recovery_reduction = __Pyx_PyInt_As_int(values[3]); if (unlikely((__pyx_v_vaccinated_recovery_reduction == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 52, __pyx_L3_error)
+      __pyx_v_vaccinated_recovery_reduction = __Pyx_PyInt_As_int(values[3]); if (unlikely((__pyx_v_vaccinated_recovery_reduction == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 74, __pyx_L3_error)
     } else {
       __pyx_v_vaccinated_recovery_reduction = ((int)0);
     }
   }
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L5_argtuple_error:;
-  __Pyx_RaiseArgtupleInvalid("recover", 0, 3, 4, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(0, 52, __pyx_L3_error)
+  __Pyx_RaiseArgtupleInvalid("recover", 0, 3, 4, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(0, 74, __pyx_L3_error)
   __pyx_L3_error:;
   __Pyx_AddTraceback("transition.recover", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __Pyx_RefNannyFinishContext();
   return NULL;
   __pyx_L4_argument_unpacking_done:;
-  __pyx_r = __pyx_pf_10transition_4recover(__pyx_self, __pyx_v_agents, __pyx_v_minimum_infection_duration, __pyx_v_recovery_probability, __pyx_v_vaccinated_recovery_reduction);
+  __pyx_r = __pyx_pf_10transition_6recover(__pyx_self, __pyx_v_agents, __pyx_v_minimum_infection_duration, __pyx_v_recovery_probability, __pyx_v_vaccinated_recovery_reduction);
 
   /* function exit code */
   __Pyx_RefNannyFinishContext();
   return __pyx_r;
 }
 
-static PyObject *__pyx_pf_10transition_4recover(CYTHON_UNUSED PyObject *__pyx_self, PyObject *__pyx_v_agents, int __pyx_v_minimum_infection_duration, float __pyx_v_recovery_probability, int __pyx_v_vaccinated_recovery_reduction) {
+static PyObject *__pyx_pf_10transition_6recover(CYTHON_UNUSED PyObject *__pyx_self, PyObject *__pyx_v_agents, int __pyx_v_minimum_infection_duration, float __pyx_v_recovery_probability, int __pyx_v_vaccinated_recovery_reduction) {
   PyObject *__pyx_v_agent = NULL;
   PyObject *__pyx_r = NULL;
   __Pyx_RefNannyDeclarations
@@ -2501,7 +2950,7 @@ static PyObject *__pyx_pf_10transition_4recover(CYTHON_UNUSED PyObject *__pyx_se
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("recover", 0);
 
-  /* "transition.pyx":65
+  /* "transition.pyx":87
  *     - None
  *     """
  *     for agent in agents:             # <<<<<<<<<<<<<<
@@ -2512,26 +2961,26 @@ static PyObject *__pyx_pf_10transition_4recover(CYTHON_UNUSED PyObject *__pyx_se
     __pyx_t_1 = __pyx_v_agents; __Pyx_INCREF(__pyx_t_1); __pyx_t_2 = 0;
     __pyx_t_3 = NULL;
   } else {
-    __pyx_t_2 = -1; __pyx_t_1 = PyObject_GetIter(__pyx_v_agents); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 65, __pyx_L1_error)
+    __pyx_t_2 = -1; __pyx_t_1 = PyObject_GetIter(__pyx_v_agents); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 87, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_1);
-    __pyx_t_3 = Py_TYPE(__pyx_t_1)->tp_iternext; if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 65, __pyx_L1_error)
+    __pyx_t_3 = Py_TYPE(__pyx_t_1)->tp_iternext; if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 87, __pyx_L1_error)
   }
   for (;;) {
     if (likely(!__pyx_t_3)) {
       if (likely(PyList_CheckExact(__pyx_t_1))) {
         if (__pyx_t_2 >= PyList_GET_SIZE(__pyx_t_1)) break;
         #if CYTHON_ASSUME_SAFE_MACROS && !CYTHON_AVOID_BORROWED_REFS
-        __pyx_t_4 = PyList_GET_ITEM(__pyx_t_1, __pyx_t_2); __Pyx_INCREF(__pyx_t_4); __pyx_t_2++; if (unlikely(0 < 0)) __PYX_ERR(0, 65, __pyx_L1_error)
+        __pyx_t_4 = PyList_GET_ITEM(__pyx_t_1, __pyx_t_2); __Pyx_INCREF(__pyx_t_4); __pyx_t_2++; if (unlikely(0 < 0)) __PYX_ERR(0, 87, __pyx_L1_error)
         #else
-        __pyx_t_4 = PySequence_ITEM(__pyx_t_1, __pyx_t_2); __pyx_t_2++; if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 65, __pyx_L1_error)
+        __pyx_t_4 = PySequence_ITEM(__pyx_t_1, __pyx_t_2); __pyx_t_2++; if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 87, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_4);
         #endif
       } else {
         if (__pyx_t_2 >= PyTuple_GET_SIZE(__pyx_t_1)) break;
         #if CYTHON_ASSUME_SAFE_MACROS && !CYTHON_AVOID_BORROWED_REFS
-        __pyx_t_4 = PyTuple_GET_ITEM(__pyx_t_1, __pyx_t_2); __Pyx_INCREF(__pyx_t_4); __pyx_t_2++; if (unlikely(0 < 0)) __PYX_ERR(0, 65, __pyx_L1_error)
+        __pyx_t_4 = PyTuple_GET_ITEM(__pyx_t_1, __pyx_t_2); __Pyx_INCREF(__pyx_t_4); __pyx_t_2++; if (unlikely(0 < 0)) __PYX_ERR(0, 87, __pyx_L1_error)
         #else
-        __pyx_t_4 = PySequence_ITEM(__pyx_t_1, __pyx_t_2); __pyx_t_2++; if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 65, __pyx_L1_error)
+        __pyx_t_4 = PySequence_ITEM(__pyx_t_1, __pyx_t_2); __pyx_t_2++; if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 87, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_4);
         #endif
       }
@@ -2541,7 +2990,7 @@ static PyObject *__pyx_pf_10transition_4recover(CYTHON_UNUSED PyObject *__pyx_se
         PyObject* exc_type = PyErr_Occurred();
         if (exc_type) {
           if (likely(__Pyx_PyErr_GivenExceptionMatches(exc_type, PyExc_StopIteration))) PyErr_Clear();
-          else __PYX_ERR(0, 65, __pyx_L1_error)
+          else __PYX_ERR(0, 87, __pyx_L1_error)
         }
         break;
       }
@@ -2550,54 +2999,54 @@ static PyObject *__pyx_pf_10transition_4recover(CYTHON_UNUSED PyObject *__pyx_se
     __Pyx_XDECREF_SET(__pyx_v_agent, __pyx_t_4);
     __pyx_t_4 = 0;
 
-    /* "transition.pyx":66
+    /* "transition.pyx":88
  *     """
  *     for agent in agents:
  *         if agent.status == 'I' and agent.days_with_status >= minimum_infection_duration - (vaccinated_recovery_reduction if agent.vaccinated else 0):             # <<<<<<<<<<<<<<
  *             if random.random() < recovery_probability:
  *                 agent.status = 'R'
  */
-    __pyx_t_4 = __Pyx_PyObject_GetAttrStr(__pyx_v_agent, __pyx_n_s_status); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 66, __pyx_L1_error)
+    __pyx_t_4 = __Pyx_PyObject_GetAttrStr(__pyx_v_agent, __pyx_n_s_status); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 88, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_4);
-    __pyx_t_6 = (__Pyx_PyString_Equals(__pyx_t_4, __pyx_n_s_I, Py_EQ)); if (unlikely(__pyx_t_6 < 0)) __PYX_ERR(0, 66, __pyx_L1_error)
+    __pyx_t_6 = (__Pyx_PyString_Equals(__pyx_t_4, __pyx_n_s_I, Py_EQ)); if (unlikely(__pyx_t_6 < 0)) __PYX_ERR(0, 88, __pyx_L1_error)
     __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
     if (__pyx_t_6) {
     } else {
       __pyx_t_5 = __pyx_t_6;
       goto __pyx_L6_bool_binop_done;
     }
-    __pyx_t_4 = __Pyx_PyObject_GetAttrStr(__pyx_v_agent, __pyx_n_s_days_with_status); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 66, __pyx_L1_error)
+    __pyx_t_4 = __Pyx_PyObject_GetAttrStr(__pyx_v_agent, __pyx_n_s_days_with_status); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 88, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_4);
-    __pyx_t_8 = __Pyx_PyObject_GetAttrStr(__pyx_v_agent, __pyx_n_s_vaccinated); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 66, __pyx_L1_error)
+    __pyx_t_8 = __Pyx_PyObject_GetAttrStr(__pyx_v_agent, __pyx_n_s_vaccinated); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 88, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_8);
-    __pyx_t_6 = __Pyx_PyObject_IsTrue(__pyx_t_8); if (unlikely(__pyx_t_6 < 0)) __PYX_ERR(0, 66, __pyx_L1_error)
+    __pyx_t_6 = __Pyx_PyObject_IsTrue(__pyx_t_8); if (unlikely(__pyx_t_6 < 0)) __PYX_ERR(0, 88, __pyx_L1_error)
     __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
     if (__pyx_t_6) {
       __pyx_t_7 = __pyx_v_vaccinated_recovery_reduction;
     } else {
       __pyx_t_7 = 0;
     }
-    __pyx_t_8 = __Pyx_PyInt_From_long((__pyx_v_minimum_infection_duration - __pyx_t_7)); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 66, __pyx_L1_error)
+    __pyx_t_8 = __Pyx_PyInt_From_long((__pyx_v_minimum_infection_duration - __pyx_t_7)); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 88, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_8);
-    __pyx_t_9 = PyObject_RichCompare(__pyx_t_4, __pyx_t_8, Py_GE); __Pyx_XGOTREF(__pyx_t_9); if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 66, __pyx_L1_error)
+    __pyx_t_9 = PyObject_RichCompare(__pyx_t_4, __pyx_t_8, Py_GE); __Pyx_XGOTREF(__pyx_t_9); if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 88, __pyx_L1_error)
     __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
     __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
-    __pyx_t_6 = __Pyx_PyObject_IsTrue(__pyx_t_9); if (unlikely(__pyx_t_6 < 0)) __PYX_ERR(0, 66, __pyx_L1_error)
+    __pyx_t_6 = __Pyx_PyObject_IsTrue(__pyx_t_9); if (unlikely(__pyx_t_6 < 0)) __PYX_ERR(0, 88, __pyx_L1_error)
     __Pyx_DECREF(__pyx_t_9); __pyx_t_9 = 0;
     __pyx_t_5 = __pyx_t_6;
     __pyx_L6_bool_binop_done:;
     if (__pyx_t_5) {
 
-      /* "transition.pyx":67
+      /* "transition.pyx":89
  *     for agent in agents:
  *         if agent.status == 'I' and agent.days_with_status >= minimum_infection_duration - (vaccinated_recovery_reduction if agent.vaccinated else 0):
  *             if random.random() < recovery_probability:             # <<<<<<<<<<<<<<
  *                 agent.status = 'R'
  *                 agent.reset_days_with_status()
  */
-      __Pyx_GetModuleGlobalName(__pyx_t_8, __pyx_n_s_random); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 67, __pyx_L1_error)
+      __Pyx_GetModuleGlobalName(__pyx_t_8, __pyx_n_s_random); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 89, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_8);
-      __pyx_t_4 = __Pyx_PyObject_GetAttrStr(__pyx_t_8, __pyx_n_s_random); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 67, __pyx_L1_error)
+      __pyx_t_4 = __Pyx_PyObject_GetAttrStr(__pyx_t_8, __pyx_n_s_random); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 89, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_4);
       __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
       __pyx_t_8 = NULL;
@@ -2612,32 +3061,32 @@ static PyObject *__pyx_pf_10transition_4recover(CYTHON_UNUSED PyObject *__pyx_se
       }
       __pyx_t_9 = (__pyx_t_8) ? __Pyx_PyObject_CallOneArg(__pyx_t_4, __pyx_t_8) : __Pyx_PyObject_CallNoArg(__pyx_t_4);
       __Pyx_XDECREF(__pyx_t_8); __pyx_t_8 = 0;
-      if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 67, __pyx_L1_error)
+      if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 89, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_9);
       __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-      __pyx_t_4 = PyFloat_FromDouble(__pyx_v_recovery_probability); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 67, __pyx_L1_error)
+      __pyx_t_4 = PyFloat_FromDouble(__pyx_v_recovery_probability); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 89, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_4);
-      __pyx_t_8 = PyObject_RichCompare(__pyx_t_9, __pyx_t_4, Py_LT); __Pyx_XGOTREF(__pyx_t_8); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 67, __pyx_L1_error)
+      __pyx_t_8 = PyObject_RichCompare(__pyx_t_9, __pyx_t_4, Py_LT); __Pyx_XGOTREF(__pyx_t_8); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 89, __pyx_L1_error)
       __Pyx_DECREF(__pyx_t_9); __pyx_t_9 = 0;
       __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-      __pyx_t_5 = __Pyx_PyObject_IsTrue(__pyx_t_8); if (unlikely(__pyx_t_5 < 0)) __PYX_ERR(0, 67, __pyx_L1_error)
+      __pyx_t_5 = __Pyx_PyObject_IsTrue(__pyx_t_8); if (unlikely(__pyx_t_5 < 0)) __PYX_ERR(0, 89, __pyx_L1_error)
       __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
       if (__pyx_t_5) {
 
-        /* "transition.pyx":68
+        /* "transition.pyx":90
  *         if agent.status == 'I' and agent.days_with_status >= minimum_infection_duration - (vaccinated_recovery_reduction if agent.vaccinated else 0):
  *             if random.random() < recovery_probability:
  *                 agent.status = 'R'             # <<<<<<<<<<<<<<
  *                 agent.reset_days_with_status()
  */
-        if (__Pyx_PyObject_SetAttrStr(__pyx_v_agent, __pyx_n_s_status, __pyx_n_s_R) < 0) __PYX_ERR(0, 68, __pyx_L1_error)
+        if (__Pyx_PyObject_SetAttrStr(__pyx_v_agent, __pyx_n_s_status, __pyx_n_s_R) < 0) __PYX_ERR(0, 90, __pyx_L1_error)
 
-        /* "transition.pyx":69
+        /* "transition.pyx":91
  *             if random.random() < recovery_probability:
  *                 agent.status = 'R'
  *                 agent.reset_days_with_status()             # <<<<<<<<<<<<<<
  */
-        __pyx_t_4 = __Pyx_PyObject_GetAttrStr(__pyx_v_agent, __pyx_n_s_reset_days_with_status); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 69, __pyx_L1_error)
+        __pyx_t_4 = __Pyx_PyObject_GetAttrStr(__pyx_v_agent, __pyx_n_s_reset_days_with_status); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 91, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_4);
         __pyx_t_9 = NULL;
         if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_4))) {
@@ -2651,12 +3100,12 @@ static PyObject *__pyx_pf_10transition_4recover(CYTHON_UNUSED PyObject *__pyx_se
         }
         __pyx_t_8 = (__pyx_t_9) ? __Pyx_PyObject_CallOneArg(__pyx_t_4, __pyx_t_9) : __Pyx_PyObject_CallNoArg(__pyx_t_4);
         __Pyx_XDECREF(__pyx_t_9); __pyx_t_9 = 0;
-        if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 69, __pyx_L1_error)
+        if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 91, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_8);
         __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
         __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
 
-        /* "transition.pyx":67
+        /* "transition.pyx":89
  *     for agent in agents:
  *         if agent.status == 'I' and agent.days_with_status >= minimum_infection_duration - (vaccinated_recovery_reduction if agent.vaccinated else 0):
  *             if random.random() < recovery_probability:             # <<<<<<<<<<<<<<
@@ -2665,7 +3114,7 @@ static PyObject *__pyx_pf_10transition_4recover(CYTHON_UNUSED PyObject *__pyx_se
  */
       }
 
-      /* "transition.pyx":66
+      /* "transition.pyx":88
  *     """
  *     for agent in agents:
  *         if agent.status == 'I' and agent.days_with_status >= minimum_infection_duration - (vaccinated_recovery_reduction if agent.vaccinated else 0):             # <<<<<<<<<<<<<<
@@ -2674,7 +3123,7 @@ static PyObject *__pyx_pf_10transition_4recover(CYTHON_UNUSED PyObject *__pyx_se
  */
     }
 
-    /* "transition.pyx":65
+    /* "transition.pyx":87
  *     - None
  *     """
  *     for agent in agents:             # <<<<<<<<<<<<<<
@@ -2684,7 +3133,7 @@ static PyObject *__pyx_pf_10transition_4recover(CYTHON_UNUSED PyObject *__pyx_se
   }
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-  /* "transition.pyx":52
+  /* "transition.pyx":74
  *                     susceptible_agent.reset_days_with_status()
  * 
  * def recover(agents, int minimum_infection_duration, float recovery_probability, int vaccinated_recovery_reduction=0):             # <<<<<<<<<<<<<<
@@ -2769,6 +3218,8 @@ static __Pyx_StringTabEntry __pyx_string_tab[] = {
   {&__pyx_n_s_days_with_status, __pyx_k_days_with_status, sizeof(__pyx_k_days_with_status), 0, 0, 1, 1},
   {&__pyx_n_s_distance, __pyx_k_distance, sizeof(__pyx_k_distance), 0, 0, 1, 1},
   {&__pyx_n_s_distribute_random_vaccine, __pyx_k_distribute_random_vaccine, sizeof(__pyx_k_distribute_random_vaccine), 0, 0, 1, 1},
+  {&__pyx_n_s_distribute_targeted_vaccine, __pyx_k_distribute_targeted_vaccine, sizeof(__pyx_k_distribute_targeted_vaccine), 0, 0, 1, 1},
+  {&__pyx_n_s_immunodeficient, __pyx_k_immunodeficient, sizeof(__pyx_k_immunodeficient), 0, 0, 1, 1},
   {&__pyx_n_s_import, __pyx_k_import, sizeof(__pyx_k_import), 0, 0, 1, 1},
   {&__pyx_n_s_infect, __pyx_k_infect, sizeof(__pyx_k_infect), 0, 0, 1, 1},
   {&__pyx_n_s_infected_agent, __pyx_k_infected_agent, sizeof(__pyx_k_infected_agent), 0, 0, 1, 1},
@@ -2776,6 +3227,7 @@ static __Pyx_StringTabEntry __pyx_string_tab[] = {
   {&__pyx_n_s_infected_location, __pyx_k_infected_location, sizeof(__pyx_k_infected_location), 0, 0, 1, 1},
   {&__pyx_n_s_infection_distance, __pyx_k_infection_distance, sizeof(__pyx_k_infection_distance), 0, 0, 1, 1},
   {&__pyx_n_s_infection_probability, __pyx_k_infection_probability, sizeof(__pyx_k_infection_probability), 0, 0, 1, 1},
+  {&__pyx_n_s_infection_probability_increase, __pyx_k_infection_probability_increase, sizeof(__pyx_k_infection_probability_increase), 0, 0, 1, 1},
   {&__pyx_n_s_location, __pyx_k_location, sizeof(__pyx_k_location), 0, 0, 1, 1},
   {&__pyx_n_s_main, __pyx_k_main, sizeof(__pyx_k_main), 0, 0, 1, 1},
   {&__pyx_n_s_math, __pyx_k_math, sizeof(__pyx_k_math), 0, 0, 1, 1},
@@ -2792,6 +3244,7 @@ static __Pyx_StringTabEntry __pyx_string_tab[] = {
   {&__pyx_n_s_susceptible_agent, __pyx_k_susceptible_agent, sizeof(__pyx_k_susceptible_agent), 0, 0, 1, 1},
   {&__pyx_n_s_susceptible_agents, __pyx_k_susceptible_agents, sizeof(__pyx_k_susceptible_agents), 0, 0, 1, 1},
   {&__pyx_n_s_susceptible_location, __pyx_k_susceptible_location, sizeof(__pyx_k_susceptible_location), 0, 0, 1, 1},
+  {&__pyx_n_s_targetable, __pyx_k_targetable, sizeof(__pyx_k_targetable), 0, 0, 1, 1},
   {&__pyx_n_s_test, __pyx_k_test, sizeof(__pyx_k_test), 0, 0, 1, 1},
   {&__pyx_n_s_transition, __pyx_k_transition, sizeof(__pyx_k_transition), 0, 0, 1, 1},
   {&__pyx_kp_s_transition_pyx, __pyx_k_transition_pyx, sizeof(__pyx_k_transition_pyx), 0, 0, 1, 0},
@@ -2824,26 +3277,38 @@ static CYTHON_SMALL_CODE int __Pyx_InitCachedConstants(void) {
   /* "transition.pyx":27
  *             agent.vaccine_efficacy = vaccine_efficacy
  * 
- * def infect(agent_list, float infection_distance, float infection_probability):             # <<<<<<<<<<<<<<
+ * def distribute_targeted_vaccine(agent_list, int vaccine_availability_day, int daily_vaccine_distribution_count, float vaccine_efficacy=0.95, int current_day=0):             # <<<<<<<<<<<<<<
+ *     """
+ *     Distributes a specific number of vaccines to susceptible and targetable agents in agent list after the vaccine becomes available.
+ */
+  __pyx_tuple__3 = PyTuple_Pack(8, __pyx_n_s_agent_list, __pyx_n_s_vaccine_availability_day, __pyx_n_s_daily_vaccine_distribution_count, __pyx_n_s_vaccine_efficacy, __pyx_n_s_current_day, __pyx_n_s_susceptible_agents, __pyx_n_s_selected_agents, __pyx_n_s_agent); if (unlikely(!__pyx_tuple__3)) __PYX_ERR(0, 27, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__3);
+  __Pyx_GIVEREF(__pyx_tuple__3);
+  __pyx_codeobj__4 = (PyObject*)__Pyx_PyCode_New(5, 0, 8, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__3, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_transition_pyx, __pyx_n_s_distribute_targeted_vaccine, 27, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__4)) __PYX_ERR(0, 27, __pyx_L1_error)
+
+  /* "transition.pyx":49
+ *             agent.vaccine_efficacy = vaccine_efficacy
+ * 
+ * def infect(agent_list, float infection_distance, float infection_probability, float infection_probability_increase = 0.4):             # <<<<<<<<<<<<<<
  *     """
  *     Infects any susceptible agents within a given distance of an infected agent, with a given infection probability.
  */
-  __pyx_tuple__3 = PyTuple_Pack(12, __pyx_n_s_agent_list, __pyx_n_s_infection_distance, __pyx_n_s_infection_probability, __pyx_n_s_infected_agents, __pyx_n_s_susceptible_agents, __pyx_n_s_infected_agent, __pyx_n_s_infected_location, __pyx_n_s_susceptible_agent, __pyx_n_s_susceptible_location, __pyx_n_s_distance, __pyx_n_s_adjusted_infection_probability, __pyx_n_s_agent); if (unlikely(!__pyx_tuple__3)) __PYX_ERR(0, 27, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_tuple__3);
-  __Pyx_GIVEREF(__pyx_tuple__3);
-  __pyx_codeobj__4 = (PyObject*)__Pyx_PyCode_New(3, 0, 12, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__3, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_transition_pyx, __pyx_n_s_infect, 27, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__4)) __PYX_ERR(0, 27, __pyx_L1_error)
+  __pyx_tuple__5 = PyTuple_Pack(13, __pyx_n_s_agent_list, __pyx_n_s_infection_distance, __pyx_n_s_infection_probability, __pyx_n_s_infection_probability_increase, __pyx_n_s_infected_agents, __pyx_n_s_susceptible_agents, __pyx_n_s_infected_agent, __pyx_n_s_infected_location, __pyx_n_s_susceptible_agent, __pyx_n_s_susceptible_location, __pyx_n_s_distance, __pyx_n_s_adjusted_infection_probability, __pyx_n_s_agent); if (unlikely(!__pyx_tuple__5)) __PYX_ERR(0, 49, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__5);
+  __Pyx_GIVEREF(__pyx_tuple__5);
+  __pyx_codeobj__6 = (PyObject*)__Pyx_PyCode_New(4, 0, 13, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__5, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_transition_pyx, __pyx_n_s_infect, 49, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__6)) __PYX_ERR(0, 49, __pyx_L1_error)
 
-  /* "transition.pyx":52
+  /* "transition.pyx":74
  *                     susceptible_agent.reset_days_with_status()
  * 
  * def recover(agents, int minimum_infection_duration, float recovery_probability, int vaccinated_recovery_reduction=0):             # <<<<<<<<<<<<<<
  *     """
  *     Recovers agents they have been infected for at least minimum_infection_duration days, with a given recovery probability.
  */
-  __pyx_tuple__5 = PyTuple_Pack(5, __pyx_n_s_agents, __pyx_n_s_minimum_infection_duration, __pyx_n_s_recovery_probability, __pyx_n_s_vaccinated_recovery_reduction, __pyx_n_s_agent); if (unlikely(!__pyx_tuple__5)) __PYX_ERR(0, 52, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_tuple__5);
-  __Pyx_GIVEREF(__pyx_tuple__5);
-  __pyx_codeobj__6 = (PyObject*)__Pyx_PyCode_New(4, 0, 5, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__5, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_transition_pyx, __pyx_n_s_recover, 52, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__6)) __PYX_ERR(0, 52, __pyx_L1_error)
+  __pyx_tuple__7 = PyTuple_Pack(5, __pyx_n_s_agents, __pyx_n_s_minimum_infection_duration, __pyx_n_s_recovery_probability, __pyx_n_s_vaccinated_recovery_reduction, __pyx_n_s_agent); if (unlikely(!__pyx_tuple__7)) __PYX_ERR(0, 74, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__7);
+  __Pyx_GIVEREF(__pyx_tuple__7);
+  __pyx_codeobj__8 = (PyObject*)__Pyx_PyCode_New(4, 0, 5, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__7, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_transition_pyx, __pyx_n_s_recover, 74, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__8)) __PYX_ERR(0, 74, __pyx_L1_error)
   __Pyx_RefNannyFinishContext();
   return 0;
   __pyx_L1_error:;
@@ -3182,25 +3647,37 @@ if (!__Pyx_RefNanny) {
   /* "transition.pyx":27
  *             agent.vaccine_efficacy = vaccine_efficacy
  * 
- * def infect(agent_list, float infection_distance, float infection_probability):             # <<<<<<<<<<<<<<
+ * def distribute_targeted_vaccine(agent_list, int vaccine_availability_day, int daily_vaccine_distribution_count, float vaccine_efficacy=0.95, int current_day=0):             # <<<<<<<<<<<<<<
+ *     """
+ *     Distributes a specific number of vaccines to susceptible and targetable agents in agent list after the vaccine becomes available.
+ */
+  __pyx_t_2 = PyCFunction_NewEx(&__pyx_mdef_10transition_3distribute_targeted_vaccine, NULL, __pyx_n_s_transition); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 27, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_2);
+  if (PyDict_SetItem(__pyx_d, __pyx_n_s_distribute_targeted_vaccine, __pyx_t_2) < 0) __PYX_ERR(0, 27, __pyx_L1_error)
+  __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
+
+  /* "transition.pyx":49
+ *             agent.vaccine_efficacy = vaccine_efficacy
+ * 
+ * def infect(agent_list, float infection_distance, float infection_probability, float infection_probability_increase = 0.4):             # <<<<<<<<<<<<<<
  *     """
  *     Infects any susceptible agents within a given distance of an infected agent, with a given infection probability.
  */
-  __pyx_t_2 = PyCFunction_NewEx(&__pyx_mdef_10transition_3infect, NULL, __pyx_n_s_transition); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 27, __pyx_L1_error)
+  __pyx_t_2 = PyCFunction_NewEx(&__pyx_mdef_10transition_5infect, NULL, __pyx_n_s_transition); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 49, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
-  if (PyDict_SetItem(__pyx_d, __pyx_n_s_infect, __pyx_t_2) < 0) __PYX_ERR(0, 27, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_d, __pyx_n_s_infect, __pyx_t_2) < 0) __PYX_ERR(0, 49, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
 
-  /* "transition.pyx":52
+  /* "transition.pyx":74
  *                     susceptible_agent.reset_days_with_status()
  * 
  * def recover(agents, int minimum_infection_duration, float recovery_probability, int vaccinated_recovery_reduction=0):             # <<<<<<<<<<<<<<
  *     """
  *     Recovers agents they have been infected for at least minimum_infection_duration days, with a given recovery probability.
  */
-  __pyx_t_2 = PyCFunction_NewEx(&__pyx_mdef_10transition_5recover, NULL, __pyx_n_s_transition); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 52, __pyx_L1_error)
+  __pyx_t_2 = PyCFunction_NewEx(&__pyx_mdef_10transition_7recover, NULL, __pyx_n_s_transition); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 74, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
-  if (PyDict_SetItem(__pyx_d, __pyx_n_s_recover, __pyx_t_2) < 0) __PYX_ERR(0, 52, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_d, __pyx_n_s_recover, __pyx_t_2) < 0) __PYX_ERR(0, 74, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
 
   /* "transition.pyx":1

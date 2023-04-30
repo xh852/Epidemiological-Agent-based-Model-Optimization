@@ -45,7 +45,7 @@ if __name__ == "__main__":
     if len(sys.argv) > 12:
         immunodeficient_proportion = float(sys.argv[12])
         infection_probability_increase = float(sys.argv[13])
-        complete_rollout_day = float(sys.argv[16])
+        complete_rollout_day = float(sys.argv[14])
     
 
     command += " {} {} {} {} {} {} {} {} {} {} {} {} {}".format(duration, num_agents, infection_distance, infection_probability, 
