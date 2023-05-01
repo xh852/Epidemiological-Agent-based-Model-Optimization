@@ -3,21 +3,23 @@ import sys
 
 def time_opt(command, number=1):
     print("-"*50,"\nTiming Original Method")
-    python_command = "python " + command
-    python = timeit.timeit("os.system('{}')".format(python_command), setup='import os', number=number)
+    python = timeit.timeit("os.system('{}')".format("python " + command), setup='import os', number=number)
     print("Python Time: {} sec".format(python))
 
     print("-"*50,"\nTiming Optimization Method: Cython")
-    cython_command = "python opt_cython/" + command
-    cython = timeit.timeit("os.system('{}')".format(cython_command), setup='import os',number=number)
+    cython = timeit.timeit("os.system('{}')".format("python opt_cython/" + command), setup='import os',number=number)
     print("Cython Time: {} sec".format(cython))
     print(f"{python/cython}x times faster")
 
     print("-"*50,"\nTiming Optimization Method: Vectorization")
-    vectorization_command = "python opt_vectorization/" + command
-    vectorization = timeit.timeit("os.system('{}')".format(vectorization_command), setup='import os',number=number)
+    vectorization = timeit.timeit("os.system('{}')".format("python opt_vectorization/" + command), setup='import os',number=number)
     print("Vectorization Time: {} sec".format(vectorization))
     print(f"{python/vectorization}x times faster")
+
+    print("-"*50,"\nTiming Optimization Method: Cython AND Vectorization")
+    cython_vec = timeit.timeit("os.system('{}')".format("python opt_cython+vect/" + command), setup='import os',number=number)
+    print("Cython AND Vectorization Time: {} sec".format(cython_vec))
+    print(f"{python/cython_vec}x times faster")
     
 
 if __name__ == "__main__":

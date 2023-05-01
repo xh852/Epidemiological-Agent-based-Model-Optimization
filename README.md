@@ -2,7 +2,7 @@
 
 ## Project Overview
 
-This project is created for DS-GA 1007 Advanced Python. It centers around building, visualizing, and optimizing an epidemiological agent-based model that builds upon the SIR (Suspectible, Infectious, Recovered) model to simulate how an epidemic may unfold. 
+This project is created for DS-GA 1019 Advanced Python. It centers around building, visualizing, and optimizing an epidemiological agent-based model that builds upon the SIR (Suspectible, Infectious, Recovered) model to simulate how an epidemic may unfold. 
 
 Our main research question is how different vaccination roll out methods affect an epidemic depending on when the vaccine is administered, who that vaccine is administered to, and other variables.
 

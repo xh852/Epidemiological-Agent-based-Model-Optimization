@@ -1,0 +1,64 @@
+Timer unit: 1e-06 s
+
+Total time: 0.568983 s
+File: /Users/czhen/Documents/GitHub/Epidemiological-Agent-based-Model-Optimization/opt_cython+vect/basic_sim.py
+Function: main at line 10
+
+Line #      Hits         Time  Per Hit   % Time  Line Contents
+==============================================================
+    10                                           def main(duration, num_agents, infection_distance, infection_probability, minimum_infection_duration, recovery_probability, profile=False):
+    11                                               # Initialize random seed
+    12         1         13.0     13.0      0.0      random.seed(42)   
+    13                                               
+    14                                               # Initialize the list of agents
+    15         1        528.0    528.0      0.1      agents = [Agent("S", (random.random(), random.random())) for _ in range(num_agents)]
+    16                                               
+    17                                               # Set one agent as patient zero
+    18         1          1.0      1.0      0.0      agents[0].status = "I"
+    19                                           
+    20                                               # Initialize status counts
+    21         1          6.0      6.0      0.0      status_counts = {"S": np.zeros(duration+1), "I": np.zeros(duration+1), "R": np.zeros(duration+1)}
+    22                                           
+    23       101         59.0      0.6      0.0      for day in range(duration):
+    24                                                   # Update status counts for current day
+    25       100      12893.0    128.9      2.3          status_counts["S"][day] = np.count_nonzero([agent.status == "S" for agent in agents])
+    26       100      12695.0    127.0      2.2          status_counts["I"][day] = np.count_nonzero([agent.status == "I" for agent in agents])
+    27       100      12622.0    126.2      2.2          status_counts["R"][day] = np.count_nonzero([agent.status == "R" for agent in agents])
+    28                                           
+    29                                                   # Update agent days with status and locations
+    30       100         57.0      0.6      0.0          max_distance = 0.01
+    31    100100      56087.0      0.6      9.9          for agent in agents:
+    32    100000      66772.0      0.7     11.7              agent.increase_days_with_status()
+    33    100000     123611.0      1.2     21.7              new_location = generate_random_location(agent.location, max_distance)
+    34    100000      67410.0      0.7     11.8              new_location = snap_to_edge(new_location, 0, 0, 1, 1)
+    35    100000      60387.0      0.6     10.6              agent.location = new_location
+    36                                           
+    37                                                   # Infect agents
+    38       100      93330.0    933.3     16.4          infect(agents, infection_distance, infection_probability)
+    39                                           
+    40                                                   # Recover agents
+    41       100       2106.0     21.1      0.4          recover(agents, minimum_infection_duration, recovery_probability)
+    42                                           
+    43                                               # Update status counts for last day
+    44         1        126.0    126.0      0.0      status_counts["S"][duration] = np.count_nonzero([agent.status == "S" for agent in agents])
+    45         1        124.0    124.0      0.0      status_counts["I"][duration] = np.count_nonzero([agent.status == "I" for agent in agents])
+    46         1        123.0    123.0      0.0      status_counts["R"][duration] = np.count_nonzero([agent.status == "R" for agent in agents])
+    47                                           
+    48                                               # Plot status counts over time
+    49         1       1223.0   1223.0      0.2      plt.plot(status_counts["S"], label="Susceptible")
+    50         1        399.0    399.0      0.1      plt.plot(status_counts["I"], label="Infected")
+    51         1        390.0    390.0      0.1      plt.plot(status_counts["R"], label="Recovered")
+    52         1         77.0     77.0      0.0      plt.xlabel("Day")
+    53         1         45.0     45.0      0.0      plt.ylabel("Number of Agents")
+    54         1        196.0    196.0      0.0      plt.title("Agent-based Simulation")
+    55         1       3916.0   3916.0      0.7      plt.legend()
+    56         1      53782.0  53782.0      9.5      plt.savefig("plot_basic_sim_optcytvec_{}_{}_{}_{}_{}_{}.png".format(duration, num_agents, infection_distance, infection_probability, minimum_infection_duration, recovery_probability))
+    57                                           
+    58                                               # line_profiler
+    59         1          2.0      2.0      0.0      import line_profiler
+    60         1          1.0      1.0      0.0      if profile:
+    61                                                   profiler = line_profiler.LineProfiler(main)
+    62                                                   profiler.enable()
+    63         1          2.0      2.0      0.0          main(duration, num_agents, infection_distance, infection_probability, minimum_infection_duration, recovery_probability)
+    64                                                   profiler.disable()
+    65                                                   profiler.print_stats()
