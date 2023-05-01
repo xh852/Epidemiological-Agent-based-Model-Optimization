@@ -1,0 +1,20 @@
+% python optimization_time.py basic_sim.py 100 10000 0.03 0.3 7 0.3
+-------------------------------------------------- 
+Timing Original Method
+Model runtime: 73.23427987098694
+Python Time: 73.54673775 sec
+-------------------------------------------------- 
+Timing Optimization Method: Cython
+Model runtime: 42.514989137649536
+Cython Time: 42.824136708 sec
+1.717413202080048x times faster
+-------------------------------------------------- 
+Timing Optimization Method: Vectorization
+Model runtime: 8.862207174301147
+Vectorization Time: 9.190092540999999 sec
+8.002828853124605x times faster
+-------------------------------------------------- 
+Timing Optimization Method: Cython AND Vectorization
+Model runtime: 9.299980878829956
+Cython AND Vectorization Time: 9.627556250000012 sec
+7.639190656507451x times faster
