@@ -1,0 +1,20 @@
+python optimization_time.py targeted_vaccine_sim.py 100 10000 0.03 0.3 7 0.3 10 200 0.95 2 0.4 0.3 30
+-------------------------------------------------- 
+Timing Original Method
+Model runtime: 76.56379008293152
+Python Time: 76.85074875 sec
+-------------------------------------------------- 
+Timing Optimization Method: Cython
+Model runtime: 44.59027576446533
+Cython Time: 44.87640908399999 sec
+1.7124977314060537x times faster
+-------------------------------------------------- 
+Timing Optimization Method: Vectorization
+Model runtime: 9.106940746307373
+Vectorization Time: 9.423293874999999 sec
+8.155401897619372x times faster
+-------------------------------------------------- 
+Timing Optimization Method: Cython AND Vectorization
+Model runtime: 9.505413055419922
+Cython AND Vectorization Time: 9.827192916000001 sec
+7.820213707708594x times faster
