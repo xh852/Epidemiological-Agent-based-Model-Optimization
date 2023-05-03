@@ -6,6 +6,11 @@ def time_opt(command, number=1):
     python = timeit.timeit("os.system('{}')".format("python " + command), setup='import os', number=number)
     print("Python Time: {} sec".format(python))
 
+    print("-"*50,"\nTiming Optimization Method: Numba")
+    numba = timeit.timeit("os.system('{}')".format("python opt_numba/" + command), setup='import os',number=number)
+    print("Vectorization Time: {} sec".format(numba))
+    print(f"{python/numba}x times faster")
+
     print("-"*50,"\nTiming Optimization Method: Cython")
     cython = timeit.timeit("os.system('{}')".format("python opt_cython/" + command), setup='import os',number=number)
     print("Cython Time: {} sec".format(cython))
