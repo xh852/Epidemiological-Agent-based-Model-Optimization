@@ -57,6 +57,9 @@ pytest tests
 
 ## Optimization Methods
 
+### Numba
+Numba's jit compiler may be used in Python to translate the inefficient functions into optimized code. We use this compiler to optimize the infect funtion. 
+
 ### Cython
 Cython may be used to translate Python code into optimized C code, and compile C code as extension modules for Python. Cython also allows for the use of C data types in Python. There are two main benefits of Cython:
 * Speed: Use of C compiliation allows for fast execution. Note, simple numerical programs that use lower-level C may not see a difference. However, programs that use many iterations can improve by many orders of magnitude.
