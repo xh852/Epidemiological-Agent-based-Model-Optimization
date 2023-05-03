@@ -90,7 +90,6 @@ def infect(agent_list, infection_distance, infection_probability, infection_prob
             agent.status = 'I'
             agent.reset_days_with_status()
 
-@jit
 def recover(agents, minimum_infection_duration, recovery_probability, vaccinated_recovery_reduction=0):
     """
     Recovers agents they have been infected for at least minimum_infection_duration days, with a given recovery probability.

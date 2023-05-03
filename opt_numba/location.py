@@ -1,8 +1,6 @@
 import random
 import numpy as np
-from numba import jit
 
-@jit
 def generate_random_location(location, max_distance):
     """
     Randomly generates a new (x, y) location that is within a max distance from the given location.
